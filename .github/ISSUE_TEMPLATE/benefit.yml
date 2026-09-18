@@ -1,0 +1,32 @@
+name: 福利信息补充或纠错
+description: 不用写代码，告诉我们哪条信息需要新增或修改。
+title: "[福利信息] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢分享。Issue 是公开的，请勿填写姓名、工号、私人联系方式、内部文件或其他敏感信息。不确定的信息也可以提出，请标明待核实。
+  - type: input
+    id: item
+    attributes:
+      label: 涉及哪项福利？
+      placeholder: 例如：年假折算；新增福利也可写名称
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: 建议补充或修改什么？
+      placeholder: 现在的说法是什么？你建议改成什么？
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: 适用范围和时间（如知道）
+      placeholder: 例如：上海员工、2026 年政策；不清楚可留空
+  - type: textarea
+    id: source
+    attributes:
+      label: 可公开核查的依据（如有）
+      description: 可以填公开链接或说明自己的核对方式；请勿上传内部文件。

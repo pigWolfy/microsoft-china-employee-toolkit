@@ -1,17 +1,22 @@
 # 贡献指南
 
-欢迎修正福利信息、改善页面体验、修复接口问题。这个仓库可以独立运行，不需要 TechFlow 主仓库或线上数据。
+感谢补充信息或改进工具。请按自己方便的方式参与；这个仓库能独立运行，不需要 TechFlow 主仓库或线上数据。
 
-## 如何参与
+## 不写代码也能参与
 
-1. 先查看 [Issues](https://github.com/pigWolfy/microsoft-china-employee-toolkit/issues)，了解已有讨论；发现错误或想提议较大的改动，可以先开 Issue。
-2. Fork 本仓库，克隆你的 Fork，在自己的分支上修改。
-3. 在本地运行并检查相关功能，至少在 `server/` 目录执行 `npm run build`。
-4. 向本仓库的 `main` 分支发起 Pull Request，说明修改内容、验证方式；界面改动请附截图。
+- [补充或纠正福利信息](https://github.com/pigWolfy/microsoft-china-employee-toolkit/issues/new?template=benefit.yml)：填写名称、建议内容即可；公开来源、地区和时间如果知道再补充。不需要 Fork、安装 Node 或运行项目。
+- [反馈页面或功能问题](https://github.com/pigWolfy/microsoft-china-employee-toolkit/issues/new?template=bug.yml)：描述现象即可；截图和复现步骤有助于排查，但不是必填。
+- 也可以在[线上页面](https://wzkiwi.com/benefits/ms/)点击「补充福利信息」。这会进入站点的审核流程，默认不会作为公开 GitHub Issue 展示。
 
-小的文字纠错也可以直接通过 GitHub 的文件编辑界面提交 Pull Request。
+GitHub Issue 对所有人公开，请勿上传内部文档、员工个人信息、账号凭据或未经授权公开的材料。不确定的信息可以标明「待核实」。
 
-## 本地开发
+## 直接修改文件
+
+小型内容或文字修改：在 GitHub 打开 `index.html`，点击编辑按钮，修改后选择“Propose changes”，按提示发起 Pull Request。无需本地运行；仓库会自动检查能否构建。福利清单从 `index.html` 中的 `const benefits = [` 开始。
+
+较大的页面或接口修改：Fork 本仓库，在自己的分支修改，并向 `main` 发起 Pull Request。说明改了什么、如何检查；界面变化可附截图。修改福利、薪资或劳动相关内容时，尽量说明公开来源、适用地区和核对日期。维护者会审核并把合并的页面内容同步到线上站点；合并 Pull Request 本身不会立即更新线上页面。
+
+## 本地开发（可选）
 
 需要 Node.js 20.9+ 和 npm。在克隆的仓库中运行：
 
@@ -27,10 +32,6 @@ npm run dev
 
 开发管理员功能、老板评分或推送提醒时，将 `server/.env.example` 复制为 `server/.env.local`，按需填写自己的测试配置。`ADMIN_TOKEN` 和 `BOSS_ANON_SALT` 应分别使用随机值；推送需要自行生成 VAPID 密钥。不要使用线上密钥或线上数据，也不要提交 `.env.local`、`server/data/` 或包含个人信息的测试文件。
 
-## 内容与提交要求
-
-- 修改福利、薪资或劳动相关内容时，尽量在 Pull Request 中说明公开来源、适用地区和核对日期；不确定的内容请标明待核实。
-- 不要上传内部文档、员工个人信息、账号凭据或未经授权公开的材料。
-- 保持改动聚焦；提交前运行 `npm run build`，并手动检查受影响的页面或接口。
+代码改动可以在 `server/` 目录运行 `npm run build`；无法本地运行时，也可以先提交 Pull Request，查看自动构建结果，再根据反馈修改。
 
 项目的原创源代码采用 [MIT License](LICENSE)。提交 Pull Request 表示同意你的贡献按该许可证发布。

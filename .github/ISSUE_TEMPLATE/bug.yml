@@ -1,0 +1,26 @@
+name: 页面或功能问题
+description: 反馈页面显示、计算或接口的问题，不要求先本地运行。
+title: "[问题] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 遇到了什么问题？
+      placeholder: 简单描述看到的现象，以及你预期的结果
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 如何遇到这个问题？（如知道）
+      placeholder: 例如：打开薪资·假期，点击某个按钮
+  - type: input
+    id: environment
+    attributes:
+      label: 使用的设备和浏览器（如相关）
+      placeholder: 例如：iPhone Safari、Windows Edge
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截图或其他补充
+      description: 可直接拖入截图；请先遮盖个人信息。

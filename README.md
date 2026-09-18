@@ -10,6 +10,12 @@
 - 匿名福利建议、薪资 midpoint 样本、老板避雷榜
 - 页面统计和发薪日 Web Push 提醒
 
+## 参与贡献
+
+**只想补充或纠正信息？** [填写福利信息表单](https://github.com/pigWolfy/microsoft-china-employee-toolkit/issues/new?template=benefit.yml)，无需安装软件或写代码。[反馈页面问题](https://github.com/pigWolfy/microsoft-china-employee-toolkit/issues/new?template=bug.yml) 也可直接在线完成。GitHub Issue 是公开的，请勿提交个人信息或内部资料。
+
+**想直接修改文件？** GitHub 网页可以编辑文件并发起 Pull Request；页面与接口改动也可在本地开发。操作步骤见 [贡献指南](CONTRIBUTING.md)。Pull Request 会自动运行构建检查，小型文字修改无需先在本地搭建环境。
+
 ## 本地运行
 
 需要 Node.js 20.9+ 和 npm。全新克隆后，无需配置密钥或连接 TechFlow 主仓库，就能启动页面和公开接口：
@@ -24,8 +30,6 @@ npm run dev
 打开 `http://localhost:3000/`。福利清单、发薪日和本地计算器可直接使用；公开接口也能启动。仓库不包含线上投稿与薪资数据，所以本地薪资样本默认为空。编辑根目录的静态页面后，请重启开发服务以重新同步文件。
 
 管理员功能、老板评分和推送提醒需要各自的环境变量。要开发这些功能，再参考 [服务端说明](server/README.md) 和 `server/.env.example` 创建自己的 `server/.env.local`。生产构建使用 `npm run build` 和 `npm start`。请勿把 `.env.local` 或 `server/data/` 提交到 Git。
-
-欢迎通过 [贡献指南](CONTRIBUTING.md) 提交改进。
 
 ## 仅托管静态页面
 
