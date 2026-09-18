@@ -1312,7 +1312,7 @@ function bossCid(){
   return c;
 }
 function bossQ(){ const k=bossKey(); return k?('?token='+encodeURIComponent(k)):''; }
-let __bossDims=[], __bossTags={positive:[],negative:[]}, __bossScores={}, __bossPicked=new Set(), __bossReady=false;
+let __bossDims=[], __bossTags={positive:[],negative:[]}, __bossScores={}, __bossPicked=new Set(), __bossGroups=[], __bossReady=false;
 
 (function initBossGate(){
   try{
@@ -1413,11 +1413,28 @@ function bossBar(v){
   return `<div class="h-1.5 rounded-full bg-gray-100 overflow-hidden"><div class="h-full ${color}" style="width:${pct}%"></div></div>`;
 }
 
+function escapeBossText(value){
+  return String(value??'').replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function voteForBoss(bossId){
+  const group=__bossGroups.find(g=>g.bossId===bossId);
+  if(!group)return;
+  document.getElementById('boss-org').value=group.org;
+  document.getElementById('boss-codename').value=group.codename;
+  __bossScores={}; __bossPicked.clear(); renderBossForm();
+  const form=document.getElementById('boss-form');
+  form.scrollIntoView({behavior:'smooth',block:'center'});
+  form.classList.add('ring-2','ring-teal-300');
+  setTimeout(()=>form.classList.remove('ring-2','ring-teal-300'),1800);
+}
+
 function renderBossList(data){
   const box=document.getElementById('boss-list');
   const note=document.getElementById('boss-count-note');
   if(!box)return;
   const groups=data.groups||[];
+  __bossGroups=groups;
   const minSample=data.minSample||5;
   if(note) note.textContent=`共 ${groups.length} 个条目 · 满 ${minSample} 票公开分数`;
   if(!groups.length){
@@ -1428,7 +1445,7 @@ function renderBossList(data){
     if(g.locked){
       return `<div class="rounded-xl border border-dashed border-gray-200 bg-gray-50/60 px-4 py-3 flex items-center justify-between gap-3">
         <div class="min-w-0">
-          <div class="text-sm font-semibold text-gray-500 truncate">${g.codename} <span class="text-[11px] font-normal text-gray-400">· ${g.org}</span></div>
+          <div class="text-sm font-semibold text-gray-500 truncate">${escapeBossText(g.codename)} <span class="text-[11px] font-normal text-gray-400">· ${escapeBossText(g.org)}</span></div>
           <div class="text-[11px] text-gray-400 mt-0.5">${g.needsMoreNets
             ? '票数够了，但都来自同一个网络，需要更多不同来源的人打分'
             : `样本积累中，满 ${minSample} 票后才公开分数`}</div>
@@ -1436,6 +1453,7 @@ function renderBossList(data){
         <div class="shrink-0 text-right">
           <div class="text-sm font-bold text-gray-400">${g.count}/${minSample}</div>
           <div class="text-[10px] text-gray-300">票</div>
+          <button type="button" data-boss-id="${escapeBossText(g.bossId)}" onclick="voteForBoss(this.dataset.bossId)" class="mt-1 text-xs font-semibold text-teal-700 hover:text-teal-800 underline underline-offset-2 cursor-pointer">给 TA 打分</button>
         </div>
       </div>`;
     }
@@ -1443,12 +1461,13 @@ function renderBossList(data){
     return `<div class="rounded-xl border border-gray-200 bg-white px-4 py-3">
       <div class="flex items-start justify-between gap-3 mb-2.5">
         <div class="min-w-0">
-          <div class="text-sm font-bold text-gray-800 truncate">${g.codename} <span class="text-[11px] font-normal text-gray-400">· ${g.org}</span></div>
+          <div class="text-sm font-bold text-gray-800 truncate">${escapeBossText(g.codename)} <span class="text-[11px] font-normal text-gray-400">· ${escapeBossText(g.org)}</span></div>
           <div class="text-[11px] text-gray-400 mt-0.5">${g.count} 票 · 中位数</div>
         </div>
         <div class="shrink-0 text-right">
           <div class="text-2xl font-black ${tone} leading-none">${g.overall.toFixed(1)}</div>
           <div class="text-[10px] text-gray-400 mt-0.5">综合 / 5</div>
+          <button type="button" data-boss-id="${escapeBossText(g.bossId)}" onclick="voteForBoss(this.dataset.bossId)" class="mt-1 text-xs font-semibold text-teal-700 hover:text-teal-800 underline underline-offset-2 cursor-pointer">给 TA 打分</button>
         </div>
       </div>
       <div class="grid gap-x-4 gap-y-1.5 sm:grid-cols-2">
@@ -1588,7 +1607,7 @@ async function hardRefresh(btn, opts={}){
     if(__swReg) await __swReg.update().catch(()=>{});
     if(!opts.skipCacheDelete && 'caches' in window){
       const ks = await caches.keys();
-      await Promise.all(ks.filter(k=>k.startsWith('benefits-ms-') && k !== 'benefits-ms-open-v2').map(k=>caches.delete(k)));
+      await Promise.all(ks.filter(k=>k.startsWith('benefits-ms-') && k !== 'benefits-ms-open-v3').map(k=>caches.delete(k)));
     }
   }catch{}
   __reloading = true;
