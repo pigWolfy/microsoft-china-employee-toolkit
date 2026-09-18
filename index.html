@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>离职必薅福利 — 微软中国</title>
+<meta name="description" content="微软中国员工离职前必须薅到手的福利清单">
+<!-- 添加到主屏幕 / PWA 友好 -->
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="微软羊毛">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' rx='40' fill='%23ffffff'/%3E%3Crect x='34' y='34' width='52' height='52' fill='%23F25022'/%3E%3Crect x='94' y='34' width='52' height='52' fill='%237FBA00'/%3E%3Crect x='34' y='94' width='52' height='52' fill='%2300A4EF'/%3E%3Crect x='94' y='94' width='52' height='52' fill='%23FFB900'/%3E%3C/svg%3E">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="./icon.svg">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://cdn.tailwindcss.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<script defer src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" onerror="window.__qrLibFailed=true"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+@keyframes barGrow { from { width: 0; } }
+.bar-animate { animation: barGrow 0.8s cubic-bezier(.22,.61,.36,1) forwards; }
+.tooltip { visibility: hidden; opacity: 0; transition: all 0.15s; }
+.tooltip-trigger:hover .tooltip { visibility: visible; opacity: 1; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+.float { animation: float 3s ease-in-out infinite; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.fade-up { animation: fadeUp 0.5s ease-out forwards; opacity: 0; }
+.card-hover { transition: all 0.3s cubic-bezier(.22,.61,.36,1); }
+.card-hover { box-shadow: 0 2px 12px -4px rgba(0,0,0,0.1); }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 16px 48px -12px rgba(0,0,0,0.18); }
+.benefit-card { transition: border-color .2s ease, box-shadow .25s ease, transform .25s ease; }
+.benefit-card:hover { border-color: #93c5fd; box-shadow: 0 14px 32px -16px rgba(15,23,42,.18); transform: translateY(-1px); }
+.benefit-detail { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .35s cubic-bezier(.22,.61,.36,1), opacity .25s ease, padding-top .3s ease, margin-top .3s ease; }
+.benefit-card.is-expanded .benefit-detail { max-height: 720px; opacity: 1; }
+.benefit-toggle-icon { display: inline-block; transition: transform .25s ease; }
+.benefit-card.is-expanded .benefit-toggle-icon { transform: rotate(180deg); }
+.blob { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.15; z-index: -1; animation: blobMove 20s ease-in-out infinite alternate; pointer-events: none; }
+@keyframes blobMove { 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(30px,-40px) scale(1.1)} 66%{transform:translate(-20px,30px) scale(0.9)} 100%{transform:translate(10px,-10px) scale(1.05)} }
+.sev-var { display: inline-flex; align-items: center; justify-content: center; min-width: 1.4em; height: 1.4em; padding: 0 .35em; border-radius: .35em; font-family: 'Times New Roman', 'STSong', serif; font-style: italic; font-weight: 700; font-size: .95em; line-height: 1; vertical-align: -0.1em; }
+.sev-var-n { background: #ffe4e6; color: #be123c; }
+.sev-var-x { background: #fed7aa; color: #c2410c; }
+.sev-var-l { background: #ede9fe; color: #6d28d9; }
+.sev-op { color: #94a3b8; font-weight: 400; padding: 0 .15em; }
+.sev-op-plus { color: #94a3b8; font-weight: 600; padding-right: .15em; }
+.sev-group-divider { grid-column: 1 / -1; display: flex; align-items: center; gap: .5rem; margin-top: .25rem; color: #6d28d9; font-size: 11px; font-weight: 600; }
+.sev-group-divider::before, .sev-group-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, #ddd6fe, transparent); }
+
+/* ===== PWA 分栏导航（桌面顶部 tab + 移动端底部 tab）===== */
+.tab-panel { display: none; }
+.tab-panel.is-active { display: block; animation: fadeUp 0.35s ease-out; }
+
+/* 桌面：顶部分段式 tab（清晰的"切换"控件）*/
+#top-tabbar {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  padding: 14px 0 12px; margin-bottom: 12px;
+  background: linear-gradient(180deg, rgba(248,250,252,.94) 65%, rgba(248,250,252,0));
+  backdrop-filter: blur(10px);
+}
+#top-tabbar .toptab-track {
+  position: relative;
+  display: inline-flex; gap: 4px;
+  padding: 5px; border-radius: 999px;
+  background: #e9eef5; border: 1px solid #dce3ec;
+  box-shadow: inset 0 1px 3px rgba(15,23,42,.06);
+}
+#top-tabbar .toptab-indicator {
+  position: absolute; top: 5px; bottom: 5px; left: 5px; right: calc(100% - 123px);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  box-shadow: 0 6px 16px rgba(59,130,246,.32);
+  transition: left .34s cubic-bezier(.2,.8,.2,1), right .34s cubic-bezier(.2,.8,.2,1);
+  z-index: 0;
+  pointer-events: none;
+}
+#top-tabbar .toptab-btn {
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 26px; border-radius: 999px;
+  border: none; background: transparent; color: #64748b;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: all .2s; white-space: nowrap;
+}
+#top-tabbar .toptab-btn:hover { color: #1e293b; }
+#top-tabbar .toptab-btn.toptab-active {
+  color: #fff;
+  background: transparent;
+  box-shadow: none;
+}
+#top-tabbar .toptab-hint {
+  font-size: 12px; color: #94a3b8;
+  animation: hintPulse 1.8s ease-in-out infinite;
+}
+@keyframes hintPulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+
+/* 移动端：底部分栏导航 */
+#mobile-tabbar { display: none; }
+@media (max-width: 767px) {
+  #top-tabbar { display: none; }
+  #mobile-tabbar {
+    display: flex;
+    position: fixed;
+    left: max(14px, env(safe-area-inset-left));
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(10px, env(safe-area-inset-bottom));
+    z-index: 45;
+    gap: 4px;
+    min-height: 66px;
+    padding: 7px;
+    border-radius: 28px;
+    background: rgba(255,255,255,0.88);
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+    backdrop-filter: blur(18px) saturate(170%);
+    border: 1px solid rgba(226,232,240,0.9);
+    box-shadow: 0 14px 34px -16px rgba(15,23,42,0.42), inset 0 1px 0 rgba(255,255,255,0.82);
+  }
+  #mobile-tabbar .tabbar-indicator {
+    position: absolute; top: 7px; bottom: 7px; left: 7px; right: calc(66.666% + 3px);
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(59,130,246,0.13), rgba(59,130,246,0.05));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
+    transition: left .32s cubic-bezier(.2,.8,.2,1), right .32s cubic-bezier(.2,.8,.2,1);
+    z-index: 0;
+    pointer-events: none;
+  }
+  #mobile-tabbar .tabbar-btn {
+    position: relative; z-index: 1;
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    padding: 7px 4px;
+    border-radius: 22px;
+    font-size: 11px; font-weight: 600;
+    color: #94a3b8;
+    background: none; border: none; cursor: pointer;
+    transition: color .2s, background .2s, transform .2s;
+  }
+  #mobile-tabbar .tabbar-btn .tabbar-ico { font-size: 22px; line-height: 1; }
+  #mobile-tabbar .tabbar-btn.tabbar-active {
+    color: #2563eb;
+    background: transparent;
+    box-shadow: none;
+  }
+  #mobile-tabbar .tabbar-btn.tabbar-active .tabbar-ico { transform: translateY(-1px) scale(1.08); }
+  .pwa-shell { padding-bottom: 108px !important; }
+  /* 移动端浮动「保存」按钮抬高，避免压住 tabbar */
+  #floating-save { bottom: 104px !important; }
+  #floating-refresh { bottom: 160px !important; }
+}
+@media (min-width: 768px) {
+  #floating-save { top: 18px; right: 18px; bottom: auto; padding: 10px 14px; font-size: 13px; }
+  #floating-refresh { top: 18px; right: 138px; bottom: auto; }
+}
+</style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-100 via-gray-50 to-blue-100 text-gray-800">
+
+<div class="blob w-96 h-96 bg-blue-300 top-[-10%] left-[-5%]"></div>
+<div class="blob w-80 h-80 bg-purple-300 top-[30%] right-[-8%]" style="animation-delay:-7s"></div>
+<div class="blob w-72 h-72 bg-amber-200 bottom-[10%] left-[20%]" style="animation-delay:-13s"></div>
+
+<div class="relative max-w-5xl mx-auto px-4 pt-10 pb-16 pwa-shell">
+
+  <!-- 顶部 tab（桌面显示） -->
+  <nav id="top-tabbar" role="tablist" aria-label="页面导航">
+    <div class="toptab-track">
+      <span class="toptab-indicator" aria-hidden="true"></span>
+      <button class="toptab-btn toptab-active" data-tab="benefits" onclick="switchTab('benefits')">💼 福利项</button>
+      <button class="toptab-btn" data-tab="payday" onclick="switchTab('payday')">💰 薪资·假期</button>
+      <button class="toptab-btn" data-tab="calc" onclick="switchTab('calc')">🎁 接裁神</button>
+      <button class="toptab-btn boss-gated" data-tab="boss" onclick="switchTab('boss')" style="display:none">🛡️ 避雷榜</button>
+    </div>
+    <span class="toptab-hint" id="toptab-hint">👆 点上方切换板块：福利清单 · 发薪日/假期 · 大礼包计算器 · 老板避雷榜</span>
+  </nav>
+
+  <!-- ===== Panel A: 福利项 ===== -->
+  <section data-panel="benefits" class="tab-panel is-active">
+
+  <!-- Hero -->
+  <div class="text-center mb-8 sm:mb-10 fade-up">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 text-blue-600 text-xs font-semibold mb-3 tracking-wide">
+      <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+      微软中国 · 离职清单
+    </div>
+    <h1 class="text-4xl sm:text-4xl font-black text-gray-900 mb-3 tracking-tight">
+      离职必薅福利 <span class="float inline-block">💼</span>
+    </h1>
+    <p class="text-gray-500 max-w-xl mx-auto text-base leading-relaxed">
+      别让你的权益悄悄溜走！<br class="sm:hidden">这里帮你在最后一天前<strong class="text-gray-700">全部薅到手</strong>。
+    </p>
+    <p class="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-medium max-w-xl mx-auto">
+      ⚠️ 备注：公司账号与工卡权限保留到员工的 last day（最后工作日），当天之后全部失效。
+    </p>
+  </div>
+
+  <!-- Priority filter -->
+  <div class="flex items-center gap-3 mb-6 fade-up" style="animation-delay:0.1s">
+    <div class="grid grid-cols-3 gap-3 flex-1" id="priority-filters"></div>
+    <button onclick="document.getElementById('contribute-modal').style.display='flex'" class="shrink-0 px-4 py-3 rounded-2xl text-sm font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 transition-all cursor-pointer whitespace-nowrap">
+      ➕ 补充福利信息
+    </button>
+  </div>
+
+  <!-- Tag filter -->
+  <div class="flex items-center justify-between gap-3 mb-2 fade-up" style="animation-delay:0.13s">
+    <p class="text-[11px] text-gray-400 leading-relaxed">💡 提示：点击任意卡片可展开查看详细描述与链接</p>
+  </div>
+  <div id="tag-filter" class="flex flex-wrap items-center gap-2 mb-4 fade-up" style="animation-delay:0.15s"></div>
+
+  <!-- Benefit cards -->
+  <div class="grid gap-3 sm:grid-cols-2" id="benefit-cards"></div>
+  </section>
+
+  <!-- ===== Panel B: 发薪 · 假期 ===== -->
+  <section data-panel="payday" class="tab-panel">
+  <!-- Quick Reference -->
+  <div class="mt-4 space-y-4 fade-up">
+    <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+      <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-sm">📅</span>
+      薪资 &amp; 假期
+    </h2>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <!-- Payday -->
+      <div class="relative overflow-hidden rounded-2xl bg-white border border-gray-200 p-5 sm:p-6 card-hover">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-100 to-transparent rounded-full -translate-y-1/2 translate-x-1/3"></div>
+        <div class="relative">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-lg">💰</span>
+            <h3 class="text-sm font-bold text-gray-900">本月工资发放日</h3>
+          </div>
+          <div id="payday-main" class="text-3xl sm:text-4xl font-black bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent"></div>
+          <div id="payday-countdown" class="mt-1.5 text-sm text-gray-500"></div>
+          <div id="payday-next" class="mt-2 text-right"><span class="text-xs text-gray-400">下月发薪日</span><div id="payday-next-date" class="text-sm text-gray-500"></div></div>
+          <div class="mt-4 pt-3 border-t border-gray-100 grid grid-cols-3 sm:grid-cols-6 gap-1.5" id="payday-calendar"></div>
+          <p class="mt-3 text-[10px] text-gray-400">📌 每月倒数第三个工作日发放。遇法定节假日提前，以 HR 通知为准。</p>
+        </div>
+      </div>
+
+      <!-- Holiday -->
+      <div class="relative overflow-hidden rounded-2xl bg-white border border-gray-200 p-5 sm:p-6 card-hover">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-emerald-100 to-transparent rounded-full -translate-y-1/2 translate-x-1/3"></div>
+        <div class="relative" id="holiday-card"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 安装到主屏幕 + 发薪日通知（辅助动作，放在核心日期信息之后） -->
+  <div id="pwa-actions" class="mt-6 grid gap-3 sm:grid-cols-2">
+    <div id="pwa-notify-card" class="rounded-2xl bg-gradient-to-br from-blue-50 to-violet-50 border border-blue-100 p-4">
+      <div class="flex items-center gap-2 mb-1.5">
+        <span class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-lg">🔔</span>
+        <h3 class="text-sm font-bold text-gray-900">开启发薪日提醒</h3>
+      </div>
+      <p class="text-xs text-gray-500 leading-relaxed mb-3">发薪前一天 + 当天推送通知，再也不错过工资到账那一刻。</p>
+      <button id="notify-btn" onclick="openNotifyModal()" class="w-full py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 active:scale-[0.98] transition-all cursor-pointer text-sm">
+        🔔 订阅发薪日提醒
+      </button>
+      <p id="notify-state" class="mt-2 text-[11px] text-gray-400"></p>
+      <!-- 桌面（非 Safari）：推送走 Google 国内连不上，改为扫码用手机订阅 -->
+      <div id="notify-qr-block" style="display:none">
+        <p class="text-xs text-gray-600 leading-relaxed mb-2">📱 桌面浏览器在国内收不到推送。请用<b>手机扫码</b>打开，iPhone「添加到主屏幕」后订阅：</p>
+        <div class="flex items-center gap-3">
+          <div id="notify-qr" class="w-28 h-28 rounded-xl bg-white border border-gray-200 p-1.5 flex items-center justify-center shrink-0"></div>
+          <p class="text-[11px] text-gray-500 leading-relaxed">扫码打开 → 底部「<b>薪资·假期</b>」→ 订阅发薪日提醒。<br>iPhone 走 Apple 通道，国内可用。</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="pwa-install-card" class="rounded-2xl bg-white border border-gray-200 p-4">
+      <div class="flex items-center gap-2 mb-1.5">
+        <span class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-lg">📲</span>
+        <h3 class="text-sm font-bold text-gray-900">添加到主屏幕</h3>
+      </div>
+      <p id="pwa-install-tip" class="text-xs text-gray-500 leading-relaxed mb-3">装到桌面像 App 一样打开；手机 PWA 可收发薪日通知。</p>
+      <button id="install-btn" onclick="triggerInstall()" class="w-full py-2.5 rounded-xl font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 active:scale-[0.98] transition-all cursor-pointer text-sm" style="display:none">
+        📲 安装到桌面
+      </button>
+      <div id="ios-install-tip" class="text-[11px] text-gray-500 leading-relaxed" style="display:none">
+        用 <b>Safari</b> 打开 → 点底部 <b>分享 ⤴</b> → 选「<b>添加到主屏幕</b>」。
+      </div>
+    </div>
+  </div>
+
+    <!-- Stock Range -->
+    <div class="mt-6 rounded-2xl bg-white border border-gray-200 p-5 card-hover">
+      <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <span class="w-6 h-6 rounded bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs">📈</span>
+        各职级年度股票 Range（USD）
+      </h3>
+      <div class="space-y-2" id="stock-bars"></div>
+      <p class="mt-3 text-[10px] text-gray-400">* 实际授予取决于绩效和市场定位。以 Total Rewards 为准。</p>
+    </div>
+
+  <!-- Compensation midpoint crowdsourcing -->
+  <div class="mt-10 rounded-2xl bg-white border border-gray-200 p-5 sm:p-6 card-hover fade-up" style="animation-delay:0.35s">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-5">
+      <div>
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-500 to-indigo-500 flex items-center justify-center text-white text-sm">💵</span>
+          各级别 Base Midpoint 共建
+        </h2>
+        <p class="mt-2 text-sm text-gray-500 leading-relaxed">只填你知道的 Level、年 Base、Compa ratio 和对应调薪周期。页面只展示聚合后的 midpoint，不公开单条 base / ratio。</p>
+      </div>
+      <div class="rounded-xl bg-slate-50 border border-slate-100 px-3 py-2 text-xs text-slate-500 leading-relaxed sm:w-72">
+        公式：<b class="text-slate-700">midpoint = 年 Base ÷ Compa ratio</b><br>
+        注意：按对应的 9 月调薪周期填写，不按提交时间
+      </div>
+    </div>
+
+    <form id="comp-form" onsubmit="submitCompensation(event)" class="grid gap-3 sm:grid-cols-6 items-end">
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium">Level</label>
+        <input id="comp-level" type="number" min="50" max="80" step="1" placeholder="62" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300" required>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium">Base（万元/年）</label>
+        <input id="comp-base" type="number" min="5" max="500" step="0.1" placeholder="40" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300" required>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium">Compa ratio</label>
+        <input id="comp-ratio" type="number" min="0.3" max="2" step="0.001" placeholder="0.90" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300" required>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium">Base 地点</label>
+        <select id="comp-site" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300">
+          <option value="北京">北京</option>
+          <option value="苏州">苏州</option>
+          <option value="上海">上海</option>
+          <option value="远程/其他">远程/其他</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium">调薪周期</label>
+        <select id="comp-cycle" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300"></select>
+      </div>
+      <button id="comp-submit" type="submit" class="w-full py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-600 hover:to-indigo-600 cursor-pointer transition-all">匿名提交</button>
+    </form>
+    <p id="comp-error" class="mt-3 text-sm text-red-500" style="display:none"></p>
+    <p id="comp-ok" class="mt-3 text-sm text-emerald-600" style="display:none"></p>
+
+    <div class="mt-5 overflow-x-auto">
+      <table class="min-w-full text-sm border-separate" style="border-spacing:0">
+        <thead id="comp-table-head" class="text-xs text-gray-400"></thead>
+        <tbody id="comp-table-body" class="align-top">
+          <tr><td class="py-6 text-center text-gray-400">加载中...</td></tr>
+        </tbody>
+      </table>
+      <div class="mt-3 flex flex-wrap items-center gap-3 text-[10px] text-gray-400">
+        <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>可信度高</span>
+        <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span>可信度中</span>
+        <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500"></span>可信度低</span>
+        <span>· 单元格底部小字：当前 / 历史折算 / 待确认 样本数</span>
+      </div>
+    </div>
+    <p id="comp-cycle-note" class="mt-3 text-[10px] text-gray-400 leading-relaxed">说明：这里统计的是由 Base / Compa ratio 反推的 salary range midpoint。历史调薪周期样本会按年度调整系数折算到当前周期并降低权重；不确定周期只计数，不参与默认估算。</p>
+
+    <div class="mt-4 rounded-2xl bg-sky-50 border border-sky-100 p-4 text-xs text-slate-600 leading-relaxed">
+      <div class="font-bold text-slate-800 mb-2">📐 统计方式公开说明</div>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <div>
+          <div class="font-semibold text-slate-700 mb-1">1. 不按提交时间统计</div>
+          <p>微软通常 9 月调薪，所以这里按“调薪周期”统计。比如 2026 年 10 月提交，但填的是 2025 年看到的 ratio，请选择“2025 年 9 月调薪后”。</p>
+        </div>
+        <div>
+          <div class="font-semibold text-slate-700 mb-1">2. Midpoint 计算公式</div>
+          <p>每条样本先计算 <b>midpoint = 年 Base ÷ Compa ratio</b>。页面只展示聚合结果，不公开个人 Base、ratio 或单条记录。</p>
+        </div>
+        <div>
+          <div class="font-semibold text-slate-700 mb-1">3. 历史样本如何使用</div>
+          <p>历史周期样本不会直接混入当前年，会先按默认年化 <b>5%</b> 折算到当前周期，并按时间衰减降权参与估算。越新的样本权重越高。</p>
+        </div>
+        <div>
+          <div class="font-semibold text-slate-700 mb-1">4. 待确认样本和可信度</div>
+          <p>选择“不确定 / 还没看到最新 ratio”的样本只计入“待确认”，不参与默认估算。可信度：当前周期样本 ≥5 为高；当前样本 ≥2 或折算样本合计 ≥5 为中；否则为低。</p>
+        </div>
+      </div>
+      <div class="mt-3 rounded-xl bg-white/70 border border-sky-100 px-3 py-2 text-[11px] text-slate-500">表格里的“当前/历史/待确认”分别表示：当前调薪周期样本数 / 历史折算样本数 / 不确定周期样本数。样本少时请只当方向参考。</div>
+    </div>
+  </div>
+  </section>
+
+  <!-- ===== Panel C: 薪资 · 大礼包 ===== -->
+  <section data-panel="calc" class="tab-panel">
+  <!-- 大礼包计算器 -->
+  <div class="mt-6 rounded-2xl bg-white border border-gray-200 p-5 sm:p-6 card-hover fade-up">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-5">
+      <div>
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-500 to-orange-500 flex items-center justify-center text-white text-sm">🎁</span>
+          离职大礼包计算器（<span class="sev-var sev-var-n">N</span><span class="text-gray-400">+</span><span class="sev-var sev-var-x">x</span>）
+        </h2>
+        <p class="mt-2 text-sm text-gray-500 leading-relaxed"><span class="sev-var sev-var-n">N</span> 按工龄推算，<span class="sev-var sev-var-x">x</span> 由你填写（比如 <span class="sev-var sev-var-n">N</span><span class="text-gray-400">+</span><span class="sev-var sev-var-x">4</span> 就填 4）。本地估算，不会上传任何数据。</p>
+      </div>
+      <div class="hidden sm:block rounded-xl bg-slate-50 border border-slate-100 px-3 py-2 text-xs text-slate-600 leading-relaxed sm:w-80 space-y-1">
+        <div class="flex items-center gap-1.5"><span class="sev-var sev-var-n">N</span><span class="sev-op">×</span><b class="text-slate-700">(年薪 + 现金 Bonus) ÷ 12</b></div>
+        <div class="flex items-center gap-1.5"><span class="sev-op-plus">+</span><span class="sev-var sev-var-x">x</span><span class="sev-op">×</span><b class="text-slate-700">年薪 ÷ 12</b></div>
+        <div class="flex items-center gap-1.5"><span class="sev-op-plus">+</span><span class="sev-var sev-var-l">L</span><span class="sev-op">×</span><b class="text-slate-700">日工资 × 倍率</b><span class="text-slate-400">（未休假）</span></div>
+      </div>
+    </div>
+
+    <form id="severance-form" onsubmit="event.preventDefault();calcSeverance();" class="grid gap-3 sm:grid-cols-4 items-end">
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium">入职日期 <span class="text-gray-400 font-normal">（如 2019-03-01）</span></label>
+        <input id="sev-join" type="text" inputmode="numeric" placeholder="2019-03-01" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-300">
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium">基础年薪（万元）<span class="text-gray-400 font-normal">（如 41）</span></label>
+        <input id="sev-base" type="number" min="5" max="500" step="0.1" placeholder="41" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-300">
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium">去年现金 Bonus（万元）<span class="text-gray-400 font-normal">（如 3.8）</span></label>
+        <input id="sev-bonus" type="number" min="0" max="200" step="0.1" placeholder="3.8" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-300">
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium"><span class="sev-var sev-var-x">x</span>（<span class="sev-var sev-var-n">N</span><span class="text-gray-400">+</span><span class="sev-var sev-var-x">x</span> 里的 <span class="sev-var sev-var-x">x</span>）<span class="text-gray-400 font-normal">（如 4）</span></label>
+        <input id="sev-x" type="number" min="0" max="24" step="0.5" placeholder="4" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-300">
+      </div>
+      <div class="sev-group-divider">法定封顶（可选）· 月工资超当地社平工资 3 倍时，<span class="sev-var sev-var-n">N</span> 部分按"社平 3 倍 × 最多 12 年"计算</div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium">当地社平工资（元/月）<span class="text-gray-400 font-normal">（不填则不封顶，如 10426）</span></label>
+        <input id="sev-avg-wage" type="number" min="0" max="100000" step="1" placeholder="留空 = 不封顶" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-rose-300">
+      </div>
+      <div class="sev-group-divider"><span class="sev-var sev-var-l">L</span> 未休假折现（可选）· <b class="text-violet-700">照抄 MS Vacation「Balance status」的 Remaining 列</b> · 法定年假按 <b class="text-violet-700">社会工龄 = 年龄 − 22</b> 推算</div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium"><b>年龄</b>（岁）<span class="text-gray-400 font-normal">（社会工龄 = 年龄 − 22，定法定年假）</span></label>
+        <input id="sev-age" type="number" min="18" max="70" step="1" placeholder="如 33" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-300">
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium">离职日期 <span class="text-gray-400 font-normal">（最后雇佣日，用于今年折算）</span></label>
+        <input id="sev-leave-date" type="text" inputmode="numeric" placeholder="2026-08-06" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-300">
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium"><b>今年年假</b>余额（天）<span class="text-gray-400 font-normal">（Initial Vacation Allowance · 自动按离职日折算）</span></label>
+        <input id="sev-cur-allow" type="number" min="0" max="40" step="0.5" placeholder="15" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-300">
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium"><b>去年结转</b>年假余额（天）<span class="text-gray-400 font-normal">（Carried over · 不折算）</span></label>
+        <input id="sev-carry-allow" type="number" min="0" max="40" step="0.5" placeholder="0" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-300">
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1 font-medium"><b>年资假</b>余额（天）<span class="text-gray-400 font-normal">（Seniority days · 100%）</span></label>
+        <input id="sev-seniority" type="number" min="0" max="20" step="0.5" placeholder="0" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-300">
+      </div>
+      <div class="sm:col-span-4 -mt-1">
+        <p id="sev-legal-hint" class="text-[11px] text-violet-600 leading-relaxed"></p>
+        <p class="text-[11px] text-gray-400 leading-relaxed mt-0.5">💡 HHTO/病假、Volunteering、Family Caregiver、OT 等<b>不折现</b>，请勿填入。</p>
+      </div>
+    </form>
+    <!-- 兼容旧逻辑的隐藏节点 -->
+    <input id="sev-leave-extra" type="hidden">
+    <input id="sev-leave-legal" type="hidden" value="">
+    </form>
+
+    <div id="sev-result" class="mt-5 rounded-2xl bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 border border-rose-100 p-4 sm:p-5">
+      <div class="grid sm:grid-cols-3 gap-3 mb-4">
+        <div class="rounded-xl bg-white border border-rose-100 px-4 py-3">
+          <div class="text-[11px] text-gray-500 flex items-center gap-1">工龄推算 <span class="sev-var sev-var-n">N</span></div>
+          <div id="sev-n" class="text-2xl font-black text-rose-600 mt-0.5">—</div>
+          <div id="sev-n-note" class="text-[11px] text-gray-400 mt-0.5">入职日期为准</div>
+        </div>
+        <div class="rounded-xl bg-white border border-amber-100 px-4 py-3">
+          <div class="text-[11px] text-gray-500 flex items-center gap-1"><span class="sev-var sev-var-n">N</span> 月薪基数（含 Bonus）</div>
+          <div id="sev-mn" class="text-2xl font-black text-amber-600 mt-0.5">—</div>
+          <div id="sev-mn-note" class="text-[11px] text-gray-400 mt-0.5">(年薪 + Bonus) / 12</div>
+        </div>
+        <div class="rounded-xl bg-white border border-orange-100 px-4 py-3">
+          <div class="text-[11px] text-gray-500 flex items-center gap-1"><span class="sev-var sev-var-x">x</span> 月薪基数（仅年薪）</div>
+          <div id="sev-mx" class="text-2xl font-black text-orange-600 mt-0.5">—</div>
+          <div id="sev-mx-note" class="text-[11px] text-gray-400 mt-0.5">年薪 / 12</div>
+        </div>
+      </div>
+
+      <div class="rounded-xl bg-white/80 border border-rose-100 p-4 text-sm text-gray-700 space-y-2">
+        <div class="flex justify-between gap-3 items-baseline">
+          <span class="text-gray-500 flex items-center gap-1"><span class="sev-var sev-var-n">N</span> 部分</span>
+          <span id="sev-line-n" class="font-mono">—</span>
+        </div>
+        <div class="flex justify-between gap-3 items-baseline">
+          <span class="text-gray-500 flex items-center gap-1"><span class="sev-var sev-var-x">x</span> 部分</span>
+          <span id="sev-line-x" class="font-mono">—</span>
+        </div>
+        <div class="flex justify-between gap-3 items-baseline">
+          <span class="text-gray-500 flex items-center gap-1"><span class="sev-var sev-var-l">L</span> 法定年假（200% 补偿）</span>
+          <span id="sev-line-leave-legal" class="font-mono">—</span>
+        </div>
+        <div class="flex justify-between gap-3 items-baseline">
+          <span class="text-gray-500 flex items-center gap-1"><span class="sev-var sev-var-l">L</span> 公司/年资假（100%）</span>
+          <span id="sev-line-leave-extra" class="font-mono">—</span>
+        </div>
+        <div class="border-t border-rose-100 pt-3 flex justify-between items-baseline gap-3">
+          <span class="text-rose-700 font-semibold">税前合计</span>
+          <span id="sev-total" class="text-2xl font-black text-rose-600">—</span>
+        </div>
+      </div>
+      <p class="mt-3 text-[11px] text-gray-400 leading-relaxed">
+        ⚠️ 仅供方向参考。<b>法定年假</b>按社会工龄（= 年龄 − 22）取 0/5/10/15 天；离职当年按 <b>服务日历天数 ÷ 365</b> 折算、进位到 0.5 天（上年结转的天数不折算）。休假不管记在法定、公司补充还是年资假名下，扣减时都<b>优先算作消耗法定年假（200%）</b>，所以上面"年资"这一项显示的是按此规则重新分配后的等效天数，可能和 MS Vacation 里显示的原始年资假余额不完全一致。<b>日工资 = 前 12 个月平均工资（含已发 Bonus）÷ 21.75</b>，法定年假 200%、公司/年资假 100% 折现。本计算器未包含：当年 bonus pro-rate、未 vest 股票补偿。"月薪超当地社平 3 倍时 <span class="sev-var sev-var-n">N</span> ≤ 12"的法定封顶已支持，需在上方填写当地社平工资才会生效（不填默认不封顶）；实际数额以 MS Vacation 记录、与 HR 协商及当地法规为准。
+      </p>
+    </div>
+  </div>
+  <!-- Disclaimer -->
+  <div class="mt-10 p-4 rounded-2xl bg-amber-50 border border-amber-100 text-xs text-amber-700 leading-relaxed fade-up" style="animation-delay:0.4s">
+    ⚠️ 以上信息由社区贡献并经基本审核，仅供参考。具体政策以公司最新规定为准，建议离职前咨询 HR 确认。
+  </div>
+  </section>
+
+  <!-- ===== Panel D: 匿名群聊 ===== -->
+  <!-- ===== Panel D: 避雷榜（匿名老板打分） ===== -->
+  <section data-panel="boss" class="tab-panel">
+    <div class="mt-6 rounded-2xl bg-white border border-gray-200 p-4 sm:p-6 card-hover fade-up">
+      <div class="mb-4">
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center text-white text-sm">🛡️</span>
+          老板避雷榜
+        </h2>
+        <p class="mt-2 text-sm text-gray-500 leading-relaxed">
+          只打分、不写小作文——<b class="text-gray-600">结构化评分比自由吐槽更难被反向定位</b>，也更难被拿去当把柄。
+          满 <b class="text-teal-700">5 票</b>才公开分数，单个人打不穿任何人。
+        </p>
+      </div>
+
+      <div class="rounded-xl bg-amber-50 border border-amber-100 text-[12px] text-amber-700 leading-relaxed px-3 py-2 mb-4">
+        ⚠️ <b>只填圈内人看得懂的代号</b>（如「老K」「M365那位」），<b>不要填真实姓名、全名拼音、alias、工号</b>。
+        打分是主观评价、不是事实指控；管理员有权删除明显恶意或可直接指向个人身份的条目。
+      </div>
+
+      <!-- 打分表单 -->
+      <form id="boss-form" onsubmit="return submitBoss(event)" class="rounded-2xl bg-gray-50/70 border border-gray-200 p-4">
+        <div class="grid gap-3 sm:grid-cols-2 mb-4">
+          <div>
+            <label class="block text-xs text-gray-500 mb-1 font-medium">组织 / 团队</label>
+            <input id="boss-org" type="text" maxlength="24" placeholder="如 STCA / Azure / M365"
+              class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-200 focus:border-teal-300">
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1 font-medium">老板代号 <span class="text-gray-400 font-normal">（不要填真名）</span></label>
+            <input id="boss-codename" type="text" maxlength="24" placeholder="如 老K"
+              class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-200 focus:border-teal-300">
+          </div>
+        </div>
+
+        <div id="boss-dims" class="space-y-2.5 mb-4"></div>
+
+        <div class="mb-4">
+          <div class="text-xs text-gray-500 mb-2 font-medium">印象标签 <span class="text-gray-400 font-normal">（可选，最多 4 个）</span></div>
+          <div id="boss-tags" class="flex flex-wrap gap-1.5"></div>
+        </div>
+
+        <button id="boss-submit" type="submit"
+          class="w-full py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 cursor-pointer transition-all">
+          匿名提交打分
+        </button>
+        <p id="boss-error" class="mt-2 text-sm text-red-500" style="display:none"></p>
+        <p id="boss-ok" class="mt-2 text-sm text-emerald-600" style="display:none"></p>
+      </form>
+
+      <!-- 榜单 -->
+      <div class="mt-5">
+        <div class="flex items-baseline justify-between mb-3">
+          <h3 class="text-sm font-bold text-gray-700">榜单</h3>
+          <span id="boss-count-note" class="text-[11px] text-gray-400"></span>
+        </div>
+        <div id="boss-list" class="space-y-2.5">
+          <div class="py-10 text-center text-gray-400 text-sm">加载中…</div>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-2xl bg-teal-50 border border-teal-100 p-4 text-xs text-slate-600 leading-relaxed">
+        <div class="font-bold text-slate-800 mb-2">🔒 这个榜单怎么防止被滥用</div>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <div class="font-semibold text-slate-700 mb-1">1. 满 5 票才公开分数</div>
+            <p>不足 5 票只显示「样本积累中」，分数和标签一律不展示。这样单个人无论打多低都<b>不可能</b>把谁的分数打穿，也避免票数太少时被打分者反推出是谁打的。</p>
+          </div>
+          <div>
+            <div class="font-semibold text-slate-700 mb-1">2. 取中位数，不取平均</div>
+            <p>平均数会被一批极端票整体拽走，中位数则要污染超过一半的票才推得动。想把谁的分数刷下去，得先凑够比真实打分更多的票。</p>
+          </div>
+          <div>
+            <div class="font-semibold text-slate-700 mb-1">3. 一人一票 + 多来源才解锁</div>
+            <p>同一个人对同一条目只保留<b>最新一票</b>，重复提交是覆盖而不是叠加。此外还要求票来自<b>至少 2 个不同网络</b>——一个人在一条宽带上反复清缓存投票，永远解锁不了。</p>
+          </div>
+          <div>
+            <div class="font-semibold text-slate-700 mb-1">4. 只有选项、没有自由文本</div>
+            <p>维度和标签都是固定选项，无法写自由评价。这既降低了法律风险，也让打分者不会因为措辞习惯被认出来。</p>
+          </div>
+        </div>
+        <div class="mt-3 rounded-xl bg-white/70 border border-teal-100 px-3 py-2 text-[11px] text-slate-500">
+          分数是同事的主观感受，样本量小的时候只当方向参考。发现恶意条目可通过「补充福利信息」入口反馈，管理员会处理。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mt-8 text-center text-xs text-gray-300">made with ❤️ · 大家都是社会主义接班人</div>
+
+  <!-- 底部分栏导航（仅移动端显示） -->
+  <nav id="mobile-tabbar" role="tablist" aria-label="页面导航">
+    <span class="tabbar-indicator" aria-hidden="true"></span>
+    <button class="tabbar-btn tabbar-active" data-tab="benefits" onclick="switchTab('benefits')" aria-label="福利项">
+      <span class="tabbar-ico">💼</span><span>福利项</span>
+    </button>
+    <button class="tabbar-btn" data-tab="payday" onclick="switchTab('payday')" aria-label="薪资与假期">
+      <span class="tabbar-ico">💰</span><span>薪资·假期</span>
+    </button>
+    <button class="tabbar-btn" data-tab="calc" onclick="switchTab('calc')" aria-label="接裁神（大礼包计算器）">
+      <span class="tabbar-ico">🎁</span><span>接裁神</span>
+    </button>
+    <button class="tabbar-btn boss-gated" data-tab="boss" onclick="switchTab('boss')" aria-label="老板避雷榜" style="display:none">
+      <span class="tabbar-ico">🛡️</span><span>避雷榜</span>
+    </button>
+  </nav>
+
+  <!-- 浮动「保存」按钮 -->
+  <button onclick="hardRefresh(this)" id="floating-refresh" aria-label="刷新到最新版"
+    title="刷新到最新版"
+    style="display:none"
+    class="fixed bottom-36 right-5 z-40 items-center justify-center w-11 h-11 rounded-full text-white text-lg font-semibold shadow-lg shadow-slate-500/20 bg-slate-800/80 hover:bg-slate-700 active:scale-95 transition-all cursor-pointer">
+    🔄
+  </button>
+  <button onclick="openSaveModal()" id="floating-save" aria-label="保存这个页面"
+    class="fixed bottom-5 right-5 z-40 flex items-center justify-center gap-2 w-12 h-12 sm:w-auto sm:h-auto sm:px-3 sm:py-2 rounded-full text-white text-sm font-semibold shadow-lg shadow-blue-500/30 bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 active:scale-95 transition-all cursor-pointer">
+    📌 <span class="hidden sm:inline">保存页面</span>
+  </button>
+
+  <!-- 保存 / 收藏 Modal -->
+  <div id="save-modal" style="display:none" class="fixed inset-0 z-50 flex items-center justify-center p-4" onclick="this.style.display='none'">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-md bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+      <button onclick="document.getElementById('save-modal').style.display='none'" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl cursor-pointer">✕</button>
+      <h3 class="text-xl font-bold text-gray-900 mb-1">📌 保存这个页面</h3>
+      <p class="text-sm text-gray-500 mb-5">收藏一下，离职前随时回来对着清单薅，别弄丢了。</p>
+
+      <!-- 复制链接 -->
+      <button onclick="copyPageLink(this)" class="w-full mb-4 flex items-center justify-between gap-2 px-4 py-3 rounded-xl bg-blue-50 border border-blue-100 text-blue-700 font-semibold hover:bg-blue-100 transition-all cursor-pointer">
+        <span class="flex items-center gap-2">🔗 复制页面链接</span>
+        <span id="copy-link-state" class="text-xs font-normal text-blue-500">点击复制</span>
+      </button>
+
+      <!-- 刷新到最新版 -->
+      <button onclick="hardRefresh(this)" class="w-full mb-4 flex items-center justify-between gap-2 px-4 py-3 rounded-xl bg-violet-50 border border-violet-100 text-violet-700 font-semibold hover:bg-violet-100 transition-all cursor-pointer">
+        <span class="flex items-center gap-2">🔄 刷新到最新版</span>
+        <span class="text-xs font-normal text-violet-400">清缓存重载</span>
+      </button>
+
+      <!-- 微信收藏 -->
+      <div id="save-wechat" class="mb-3 rounded-xl border border-emerald-100 bg-emerald-50/60 p-3">
+        <div class="flex items-center gap-2 text-sm font-semibold text-emerald-700 mb-1">💚 微信里收藏</div>
+        <p class="text-xs text-emerald-700/90 leading-relaxed">点右上角 <b>···</b> → 选「<b>收藏</b>」，或「<b>发送给朋友</b>」转给自己的文件传输助手。</p>
+      </div>
+
+      <!-- 加到主屏幕 -->
+      <div id="save-ios" class="mb-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
+        <div class="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1">📱 iPhone：加到桌面</div>
+        <p class="text-xs text-gray-500 leading-relaxed">用 <b>Safari</b> 打开 → 点底部 <b>分享 ⤴</b> → 选「<b>添加到主屏幕</b>」，桌面上就有一个图标了。</p>
+      </div>
+      <div id="save-android" class="mb-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
+        <div class="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1">📱 安卓：加到桌面</div>
+        <p class="text-xs text-gray-500 leading-relaxed">用 <b>Chrome / 浏览器</b> 打开 → 点右上角 <b>⋮</b> → 选「<b>添加到主屏幕</b> / 安装应用」。</p>
+      </div>
+
+      <!-- 二维码 -->
+      <div class="mt-4 pt-4 border-t border-gray-100 text-center">
+        <p class="text-xs text-gray-500 mb-3">扫码重新打开，或截图发给同事 👇</p>
+        <div id="save-qr" class="inline-flex items-center justify-center w-40 h-40 rounded-xl bg-white border border-gray-200 p-2"></div>
+        <p id="save-qr-fallback" class="mt-2 text-[11px] text-gray-400" style="display:none">二维码加载失败，请用上面的「复制链接」分享。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contribute Modal -->
+  <div id="contribute-modal" style="display:none" class="fixed inset-0 z-50 flex items-center justify-center p-4" onclick="this.style.display='none'">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-lg bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl" onclick="event.stopPropagation()">
+      <button onclick="document.getElementById('contribute-modal').style.display='none'" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl cursor-pointer">✕</button>
+      <h3 class="text-xl font-bold text-gray-900 mb-1">🤝 补充微软福利信息</h3>
+      <p class="text-sm text-gray-500 mb-4">知道还有哪些福利需要离职前薅？提交后经审核展示在页面上。</p>
+      <div id="contribute-success" style="display:none" class="text-center py-8">
+        <div class="text-5xl mb-4">🎉</div>
+        <p class="text-lg text-emerald-600 font-semibold">提交成功！</p>
+        <p class="text-gray-500 text-sm mt-2">审核通过后会展示在页面上，感谢贡献！</p>
+        <button onclick="document.getElementById('contribute-modal').style.display='none';document.getElementById('contribute-success').style.display='none';document.getElementById('contribute-form').style.display='block'" class="mt-4 px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 cursor-pointer">关闭</button>
+      </div>
+      <form id="contribute-form" onsubmit="submitContribute(event)" class="space-y-3">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1 font-medium">福利名称</label>
+          <input type="text" id="c-benefit" placeholder="如：员工折扣、体检预约" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1 font-medium">详细描述</label>
+          <textarea id="c-desc" placeholder="具体怎么操作？有什么注意事项？" rows="3" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 resize-none"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1 font-medium">相关链接（可选）</label>
+          <input type="text" id="c-link" placeholder="https://..." class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1 font-medium">联系方式（可选）</label>
+          <input type="text" id="c-contact" placeholder="邮箱或其他" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300">
+        </div>
+        <p id="c-error" class="text-red-500 text-sm" style="display:none"></p>
+        <button type="submit" id="c-submit" class="w-full py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 cursor-pointer transition-all">提交建议</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 发薪日提醒订阅 Modal -->
+  <div id="notify-modal" style="display:none" class="fixed inset-0 z-50 flex items-center justify-center p-4" onclick="this.style.display='none'">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-md bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+      <button onclick="document.getElementById('notify-modal').style.display='none'" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl cursor-pointer">✕</button>
+      <h3 class="text-xl font-bold text-gray-900 mb-1">🔔 发薪日提醒订阅</h3>
+      <p class="text-sm text-gray-500 mb-4">到点自动推送通知到你手机，告诉你本月发薪日。</p>
+
+      <!-- 本月发薪日 -->
+      <div class="mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-violet-50 border border-blue-100 p-4">
+        <div class="text-[11px] text-gray-500 mb-0.5">本月发薪日</div>
+        <div id="nm-payday" class="text-2xl font-black bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">—</div>
+        <div id="nm-payday-sub" class="mt-0.5 text-xs text-gray-500"></div>
+      </div>
+
+      <!-- 订阅项 -->
+      <label class="flex items-center gap-3 mb-4 cursor-pointer select-none">
+        <input id="nm-payday-on" type="checkbox" checked class="w-5 h-5 rounded accent-blue-600">
+        <span class="text-sm font-semibold text-gray-800">💰 发薪日提醒</span>
+      </label>
+
+      <!-- 提醒时间 -->
+      <div id="nm-timing" class="space-y-2 mb-2">
+        <div class="text-xs font-medium text-gray-500 mb-1">提醒时间</div>
+        <label class="flex items-center gap-3 rounded-xl border border-gray-200 px-3 py-2.5 cursor-pointer has-[:checked]:border-blue-300 has-[:checked]:bg-blue-50/60 transition-all">
+          <input type="radio" name="nm-when" value="default" checked class="w-4 h-4 accent-blue-600">
+          <span class="text-sm text-gray-700">发薪日<b>前一天</b>提醒 <span class="text-gray-400 text-xs">（默认）</span></span>
+        </label>
+        <label class="flex items-center gap-3 rounded-xl border border-gray-200 px-3 py-2.5 cursor-pointer has-[:checked]:border-blue-300 has-[:checked]:bg-blue-50/60 transition-all">
+          <input type="radio" name="nm-when" value="custom" class="w-4 h-4 accent-blue-600">
+          <span class="text-sm text-gray-700 flex items-center gap-2 flex-wrap">每月固定
+            <select id="nm-dom" class="px-2 py-1 rounded-lg bg-gray-50 border border-gray-200 text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"></select>
+            号提醒
+          </span>
+        </label>
+      </div>
+      <p class="text-[11px] text-gray-400 leading-relaxed mb-4">💡 若你选的日期晚于当月发薪日，则自动改到<b>发薪日当天</b>提醒（不会错过也不迟到）。</p>
+
+      <button id="nm-save" onclick="saveNotify()" class="w-full py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 active:scale-[0.98] transition-all cursor-pointer">
+        保存并开启通知
+      </button>
+      <button id="nm-unsub" onclick="unsubNotify()" style="display:none" class="w-full mt-2 py-2 rounded-xl font-medium text-rose-600 bg-rose-50 border border-rose-100 hover:bg-rose-100 transition-all cursor-pointer text-sm">
+        取消订阅
+      </button>
+      <p id="nm-msg" class="mt-3 text-[12px] text-gray-400 leading-relaxed"></p>
+      <p id="nm-ios-tip" class="mt-2 text-[11px] text-amber-600 leading-relaxed" style="display:none">📱 iPhone 需先用 <b>Safari</b> 把页面「添加到主屏幕」，再从桌面图标打开才能开启通知。</p>
+      <p id="nm-desktop-tip" class="mt-2 text-[11px] text-amber-600 leading-relaxed" style="display:none">💻 桌面版 Chrome/Edge 的推送依赖 <b>Google 服务</b>，国内网络常常连不上。若开启失败，推荐用 <b>iPhone Safari</b>「添加到主屏幕」后订阅（走 Apple 通道，国内可用）。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const benefits = [
+  { id:'ms-medical', title:'中意医疗保险理赔', desc:'补充商业医疗保险（中意人寿）离职后即失效。离职前务必把所有未报销的医疗费用提交理赔。牙科、洗牙、体检、门诊都要检查额度。另外建议趁在职去看病、开一些常备药，离职后就没法报销了。生育相关：生育礼金 800 元，产检及生产费用可报销医保外的部分；育儿假不可折现（HR 已确认）。', icon:'🏥', priority:'high', timing:'离职前 30 天开始整理票据', tags:['保险'] },
+  { id:'ms-bonus', title:'年终奖发放时间节点', desc:'年终奖通常 9 月随工资发放（对应财年 7.1—6.30 绩效）。7 月 1 日之后离职仍有资格；之前离职则无法拿到。时间点非常关键！', icon:'💰', priority:'high', timing:'尽量在 7 月 1 日之后离职', tags:['奖金'] },
+  { id:'ms-stock', title:'股票归属时间确认', desc:'确认 MSFT 股票 vesting 时间表。离职日之前的股票继续 vest，离职日之后不再 vest，未归属部分被没收。具体条款可在 TRP 查看当时签署的股票协议。推迟离职可能价值数千美元。', icon:'📈', priority:'high', timing:'查看最近一次 vesting 日期', tags:['股票'], link:'https://totalrewards.azurefd.net/stock' },
+  { id:'ms-fesco', title:'FESCO 好生活网积分兑换', desc:'每月充值 47 积分，可兑换商品。（HR 已确认）离职后积分不会立即清空，一般有 2-3 年有效期，但建议尽早用完以免遗忘到期作废。登录用户名："MS_你的Alias"（如 MS_YourAlias）。', icon:'🛍️', priority:'high', timing:'建议离职前用完（最长保留 2-3 年）', tags:['补贴'], link:'https://benefit.fesco.com.cn/Benefit/Login' },
+  { id:'ms-recognition', title:'Recognition 积分兑换（MAI Gratitude）', desc:'MAI Gratitude program 里其他同事给你的感谢/认可积分可以兑换礼品卡等奖励。离职后账户失效、积分作废，务必在离职前登录检查余额并全部兑换完。', icon:'🙏', priority:'high', timing:'离职前登录检查并全部兑换', tags:['奖金'], link:'http://ygp60187chn.awardsworldwide.com/' },
+  { id:'ms-payslip', title:'下载工资单 Payslip', desc:'离职后无法访问公司系统，届时无法下载历史工资单。工资单在办理房贷、签证、背景调查等场景都可能需要。务必在离职前把所有工资单导出保存。', icon:'📄', priority:'high', timing:'离职前务必下载', tags:['其他'] },
+  { id:'ms-xbox', title:'Xbox Game Pass 激活码', desc:'可领取 Game Pass Ultimate 激活码。激活后即使离职也能用到有效期结束。', icon:'🎮', priority:'medium', timing:'离职前随时兑换', tags:['订阅'], link:'https://studiostokens.azurewebsites.net/', value:'💰 闲鱼价值约 ¥1,000（转卖违反公司政策，建议送好友使用）' },
+  { id:'ms-software', title:'微软产品永久密钥领取（Office、Windows、VS 等）', desc:'在 VS Subscriptions 的 Product Keys 页面，可领取 Windows、Office 组件（Access、Word 等）、Visual Studio 等产品的永久激活码。部分密钥为 Static（已显示），部分需点击 Claim Key 领取（有数量限制）。离职后订阅失效，未领取的将无法再获取，已领取的仍可使用。建议全部 Claim 下来保存好。', icon:'💻', priority:'medium', timing:'离职前全部 Claim 并保存', tags:['软件'], link:'https://my.visualstudio.com/ProductKeys?mkt=en-us' },
+  { id:'ms-edu', title:'工会教育培训补贴', desc:'工会提供教育培训补贴，可报名外部课程、考证书。搜索邮件"2024年工会健身&培训教育报销窗口开放啦!"获取最新信息。', icon:'📚', priority:'medium', timing:'离职前查询剩余额度', tags:['教育','补贴'] },
+  { id:'ms-fit', title:'工会健身补贴', desc:'每年健身补贴（健身房会员、运动装备等）。搜索邮件"2024年工会健身&培训教育报销窗口开放啦!"获取最新信息。工会运动打卡积分也别忘了用。', icon:'💪', priority:'medium', timing:'离职前用完额度', tags:['健身','补贴'] },
+  { id:'ms-cert', title:'预约证书考试（免费）', desc:'在职期间可免费预约微软认证考试。Access 失效前最多同时预约 2 个待考试项目。线下考试工卡失效后需带身份证及其他证件。题库参考：examtopics.com', icon:'🎓', priority:'low', timing:'Access 失效前预约', tags:['教育'], link:'https://www.examtopics.com/exams/microsoft/az-104/view/' },
+  { id:'ms-ref', title:'在职证明 / 薪资证明', desc:'如果近期有办签证、贷款等需求，离职前找 HR 开具在职证明和薪资证明。离职后再开比较麻烦。', icon:'📋', priority:'medium', timing:'离职前找 HR 开具', tags:['其他'] },
+  { id:'ms-contact', title:'更新离职后联系方式', desc:'离职前更新个人邮箱和手机号码，确保公司能联系到你（税务、股票等事项）。访问 aka.ms/ec 更新个人邮箱。', icon:'📱', priority:'medium', timing:'离职前更新', tags:['其他'], link:'https://aka.ms/ec' },
+  { id:'ms-edge', title:'备份公司账号下的个人数据（OneDrive + Edge）', desc:'离职后公司 alias 账号被禁用，连带账号下的所有数据都访问不了。离职前务必把 OneDrive 里的重要文件同步到个人设备 / 个人云盘，同时导出 Edge 里的密码、收藏夹、Collections 和 Workspace。', icon:'☁️', priority:'high', timing:'离职前完成同步与导出', tags:['其他'] },
+  { id:'ms-unemp', title:'离职后领取失业补助金', desc:'离职后可以向当地政府申请失业补助金（各地政策不同）。失业救济金期间政府会帮你续上社保和医保。', icon:'🏛️', priority:'medium', timing:'离职后尽快申请', tags:['其他'], link:'https://mp.weixin.qq.com/s/TvQ-2OxwJdyLRFA6niRYSA' },
+  { id:'ms-leave', title:'年假 / 年资假 / HHTO 假期处理', desc:'未休完的年假和年资假可以折算为工资。HHTO 假（含病假）不可折现，但 HR 确认即使半年离职也仍可享受 15 天 HHTO，有离职计划的同事可以提前安排休完，别浪费。', icon:'🏖️', priority:'medium', timing:'离职前确认余额并安排休完 HHTO', tags:['假期'] },
+  { id:'ms-springhealth', title:'专业咨询师心理咨询（Spring Health）', desc:'通过 Spring Health（EAP 员工帮助计划）可以预约专业心理咨询师，离职后仍可继续使用 60 天。离职是高压力时期，别浪费这个福利——离职前后有需要都可以约。', icon:'🧠', priority:'medium', timing:'离职后仍可用 60 天', tags:['健身'] },
+  { id:'ms-copilot', title:'GitHub Copilot 个人授权', desc:'在职期间由公司提供，离职后需自行订阅。', icon:'🤖', priority:'low', tags:['软件'] },
+  { id:'ms-bing', title:'Bing Rewards 积分兑换', desc:'Bing Rewards 积分可以兑换礼品卡等。积分较多的话离职前记得兑换。', icon:'🔍', priority:'low', timing:'离职前兑换', tags:['其他'], link:'https://rewards.bing.com/redeem/?form=edgepredeem' },
+  { id:'ms-bc', title:'BeyondCompare 5 激活码', desc:'在 ServiceNow 可以申请 BeyondCompare 5 的激活码。离职后无法再申请。', icon:'🔀', priority:'low', timing:'离职前申请', tags:['软件'], link:'https://microsoft.service-now.com/sp?id=sc_cat_item&sys_id=63372f60db042414b720f3376896196e' },
+  { id:'ms-dental', title:'年度体检 + 洗牙 / 牙科预约', desc:'中意人寿可报销年度体检、洗牙、牙科等费用，离职后保险即失效。邮箱里搜"体检"或"洗牙"可以找到预约指引；建议体检和洗牙一起在离职前 30 天内安排完。', icon:'🦷', priority:'high', timing:'离职前 30 天内完成', tags:['保险'] },
+  { id:'ms-oreilly', title:'O’Reilly 图书免费阅读', desc:'使用微软员工邮箱账号注册登录 O’Reilly 在线学习平台，可免费阅读其出版的技术书籍、视频课程等内容。离职后邮箱失效即无法再登录，建议尽早注册并趁在职多看书。', icon:'📖', priority:'medium', timing:'离职前注册使用', tags:['教育'], link:'https://www.oreilly.com/' },
+  { id:'ms-alumni-network', title:'微软校友网络（MSA）会员福利', desc:'离职后登录注册微软校友网络（Microsoft Alumni Network），提交后等待工作日完成审批，通过后可领取一年免费会员资格（到期前记得关闭自动续费，避免被扣费）。福利包括：免费一年 M365 家庭版、Visual Studio 订阅、3 次免费微软认证考试机会、员工折扣商店等，是少数离职后才申请、而不是必须在职前处理的福利。', icon:'🏫', priority:'high', timing:'离职后登录注册申请', tags:['教育','订阅'], link:'https://www.microsoftalumni.com/' },
+];
+
+const priorityOrder={high:0,medium:1,low:2};
+const priorityConfig = {
+  high:  {label:'务必处理',icon:'🔴',bg:'bg-red-50',border:'border-red-200',text:'text-red-600',activeBg:'bg-red-100',ring:'ring-red-200'},
+  medium:{label:'建议处理',icon:'🟡',bg:'bg-amber-50',border:'border-amber-200',text:'text-amber-600',activeBg:'bg-amber-100',ring:'ring-amber-200'},
+  low:   {label:'可选',icon:'🟢',bg:'bg-emerald-50',border:'border-emerald-200',text:'text-emerald-600',activeBg:'bg-emerald-100',ring:'ring-emerald-200'},
+};
+const tagColors={'保险':'bg-green-100 text-green-700','奖金':'bg-rose-100 text-rose-700','股票':'bg-yellow-100 text-yellow-700','补贴':'bg-cyan-100 text-cyan-700','订阅':'bg-purple-100 text-purple-700','软件':'bg-blue-100 text-blue-700','教育':'bg-indigo-100 text-indigo-700','健身':'bg-emerald-100 text-emerald-700','假期':'bg-amber-100 text-amber-700','其他':'bg-gray-100 text-gray-600'};
+const stockRanges=[{level:'L60',max:12,gradient:'from-gray-300 to-gray-400'},{level:'L61',max:18,gradient:'from-blue-300 to-blue-400'},{level:'L62',max:25,gradient:'from-cyan-400 to-blue-500'},{level:'L63',max:40,gradient:'from-emerald-400 to-teal-500'},{level:'L64',max:57,gradient:'from-amber-400 to-orange-500'},{level:'L65',max:92,gradient:'from-orange-400 to-red-500'},{level:'L66',max:168,gradient:'from-rose-400 to-pink-500'},{level:'L67',max:368,gradient:'from-purple-400 to-violet-600'}];
+const holidays2026=[{name:'元旦',start:'2026-01-01',end:'2026-01-03',icon:'🎉'},{name:'春节',start:'2026-02-17',end:'2026-02-23',icon:'🧧'},{name:'清明节',start:'2026-04-05',end:'2026-04-07',icon:'🌿'},{name:'劳动节',start:'2026-05-01',end:'2026-05-05',icon:'✨'},{name:'端午节',start:'2026-06-19',end:'2026-06-21',icon:'🐲'},{name:'中秋节',start:'2026-09-25',end:'2026-09-27',icon:'🌙'},{name:'国庆节',start:'2026-10-01',end:'2026-10-07',icon:'🇨🇳'}];
+const holidays2027=[{name:'元旦',start:'2027-01-01',end:'2027-01-03',icon:'🎉'},{name:'春节',start:'2027-02-06',end:'2027-02-12',icon:'🧧'}];
+const WEEKDAYS=['周日','周一','周二','周三','周四','周五','周六'];
+
+function getNthLastBizDay(y,m,n){const last=new Date(y,m+1,0);let c=0;const d=new Date(last);while(c<n){if(d.getDay()!==0&&d.getDay()!==6)c++;if(c<n)d.setDate(d.getDate()-1);}return d;}
+function daysUntil(t){const n=new Date(),td=new Date(n.getFullYear(),n.getMonth(),n.getDate()),d=new Date(t.getFullYear(),t.getMonth(),t.getDate());return Math.ceil((d-td)/86400000);}
+function fmtDate(d){return `${d.getMonth()+1}月${d.getDate()}日（${WEEKDAYS[d.getDay()]}）`;}
+function fmtShort(s){const d=new Date(s+'T00:00:00');return `${d.getMonth()+1}月${d.getDate()}日`;}
+
+let currentFilter='all';
+let currentTag='all';
+let expandedBenefits=new Set();
+
+function allTags(){
+  const s=new Set();
+  for(const b of benefits)(b.tags||[]).forEach(t=>s.add(t));
+  return [...s];
+}
+
+function toggleBenefit(id){
+  const set=expandedBenefits;
+  if(set.has(id))set.delete(id);else set.add(id);
+  const card=document.querySelector(`[data-benefit-id="${id}"]`);
+  if(!card){renderCards();return;}
+  const isExpanded=set.has(id);
+  card.classList.toggle('is-expanded',isExpanded);
+  const chip=card.querySelector('.benefit-toggle');
+  if(chip)chip.innerHTML=isExpanded?'收起 <span class="benefit-toggle-icon">↓</span>':'详情 <span class="benefit-toggle-icon">↓</span>';
+}
+
+function renderCards(){
+  const sorted=[...benefits].sort((a,b)=>priorityOrder[a.priority]-priorityOrder[b.priority]);
+  const filtered=sorted.filter(b=>{
+    if(currentFilter!=='all'&&b.priority!==currentFilter)return false;
+    if(currentTag!=='all'&&!(b.tags||[]).includes(currentTag))return false;
+    return true;
+  });
+  document.getElementById('benefit-cards').innerHTML=filtered.length?filtered.map((item,i)=>{
+    const p=priorityConfig[item.priority];
+    const expanded=expandedBenefits.has(item.id);
+    const tags=(item.tags||[]).map(t=>`<span class="text-[10px] px-1.5 py-0.5 rounded font-medium ${tagColors[t]||'bg-gray-100 text-gray-600'}">${t}</span>`).join('');
+    const detail=`
+      <div class="benefit-detail">
+        <div class="mt-3 pt-3 border-t border-gray-100 space-y-2">
+          <p class="text-gray-600 text-[13px] leading-relaxed">${item.desc.replace(/^离职后失效。/,'<span class=\"inline-block bg-red-100 text-red-600 font-bold px-1.5 py-0.5 rounded text-[11px] mr-1\">⚠️ 离职后失效</span>')}</p>
+          ${item.value?`<div class="px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 text-[12px] font-bold text-amber-700">${item.value}</div>`:''}
+          ${item.link?`<div class="text-[11px] text-right"><a href="${item.link}" target="_blank" rel="noopener noreferrer" class="font-semibold text-blue-500 hover:text-blue-600" onclick="event.stopPropagation()">打开链接 ↗</a></div>`:''}
+        </div>
+      </div>`;
+    return `<button type="button" data-benefit-id="${item.id}" onclick="toggleBenefit('${item.id}')" class="benefit-card w-full text-left bg-white rounded-xl border border-gray-200 p-3 sm:p-3.5 fade-up cursor-pointer ${expanded?'is-expanded':''}" style="animation-delay:${i*0.03}s">
+      <div class="flex items-start gap-3">
+        <span class="w-9 h-9 rounded-lg ${p.bg} flex items-center justify-center text-lg shrink-0">${item.icon}</span>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="text-gray-900 font-bold text-sm leading-snug">${item.title}</h3>
+            <span class="text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${p.bg} ${p.text} whitespace-nowrap">${p.icon}</span>
+          </div>
+          ${item.timing?`<div class="mt-1 text-[11px] text-amber-600 font-medium">⏰ ${item.timing}</div>`:''}
+          <div class="mt-1 flex flex-wrap gap-1">${tags}</div>
+        </div>
+        <span class="benefit-toggle shrink-0 ml-2 text-[10px] font-semibold text-blue-500 bg-blue-50 border border-blue-100 rounded-full px-2 py-0.5 whitespace-nowrap mt-0.5 flex items-center gap-1">${expanded?'收起':'详情'} <span class="benefit-toggle-icon">↓</span></span>
+      </div>
+      ${detail}
+    </button>`;
+  }).join(''):'<div class="col-span-2 text-center py-12 text-gray-400">该条件下暂无福利项</div>';
+}
+
+function toggleTag(t){currentTag=currentTag===t?'all':t;renderTagBar();renderCards();}
+
+function renderTagBar(){
+  const bar=document.getElementById('tag-filter');
+  if(!bar)return;
+  const tags=allTags();
+  const all=`<button onclick="toggleTag('all')" class="text-[11px] px-2.5 py-1 rounded-full border ${currentTag==='all'?'bg-gray-900 text-white border-gray-900':'bg-white border-gray-200 text-gray-600 hover:border-gray-300'}">全部</button>`;
+  bar.innerHTML=all+tags.map(t=>{
+    const active=currentTag===t;
+    const base=tagColors[t]||'bg-gray-100 text-gray-600';
+    return `<button onclick="toggleTag('${t}')" class="text-[11px] px-2.5 py-1 rounded-full border ${active?'ring-2 ring-blue-200 '+base+' border-transparent font-semibold':'bg-white border-gray-200 text-gray-600 hover:border-gray-300'}">${t}</button>`;
+  }).join('');
+}
+
+function renderFilters(){
+  const counts={high:benefits.filter(b=>b.priority==='high').length,medium:benefits.filter(b=>b.priority==='medium').length,low:benefits.filter(b=>b.priority==='low').length};
+  document.getElementById('priority-filters').innerHTML=['high','medium','low'].map(p=>{
+    const c=priorityConfig[p],active=currentFilter===p;
+    return `<button onclick="toggleFilter('${p}')" class="rounded-2xl p-4 border text-center transition-all cursor-pointer ${active?c.activeBg+' '+c.border+' ring-2 '+c.ring:'bg-white border-gray-100 hover:border-gray-200 shadow-sm'}">
+      <div class="text-3xl font-black ${c.text}">${counts[p]}</div>
+      <div class="text-xs font-medium ${active?c.text:'text-gray-500'} mt-0.5">${c.icon} ${c.label}</div>
+    </button>`;
+  }).join('');
+}
+
+function toggleFilter(p){currentFilter=currentFilter===p?'all':p;renderFilters();renderCards();}
+
+function renderPayday(){
+  const now=new Date(),y=now.getFullYear(),m=now.getMonth();
+  const thisP=getNthLastBizDay(y,m,3),nm=m+1,ny=nm>11?y+1:y,nextP=getNthLastBizDay(ny,nm%12,3);
+  const days=daysUntil(thisP),show=days<0?nextP:thisP,showD=days<0?daysUntil(nextP):days;
+  document.getElementById('payday-main').textContent=fmtDate(show);
+  const cd=document.getElementById('payday-countdown');
+  if(showD>0)cd.innerHTML=`距离发薪还有 <span class="text-blue-600 font-black text-lg">${showD}</span> 天`;
+  else if(showD===0)cd.innerHTML='<span class="text-emerald-600 font-bold">🎉 今天发工资！</span>';
+  if(days>=0)document.getElementById('payday-next-date').textContent=fmtDate(nextP);
+  else document.getElementById('payday-next').style.display='none';
+  document.getElementById('payday-calendar').innerHTML=Array.from({length:6},(_,i)=>{
+    const cm=(m+i)%12,cy=y+Math.floor((m+i)/12),pd=getNthLastBizDay(cy,cm,3),d=daysUntil(pd),past=d<0,cur=i===0&&d>=0;
+    return `<div class="rounded-xl px-2 py-1.5 text-[10px] border ${cur?'bg-blue-50 border-blue-200 text-blue-600':past?'bg-gray-50 border-gray-100 text-gray-300':'bg-gray-50 border-gray-100 text-gray-500'}">
+      <div class="font-semibold">${cm+1}月</div>
+      <div class="text-xs font-bold ${cur?'text-blue-600':past?'text-gray-300':'text-gray-700'}">${pd.getDate()}日 ${WEEKDAYS[pd.getDay()]}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderHoliday(){
+  const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const allH=[...holidays2026,...holidays2027];let best=null;
+  for(const h of allH){const s=new Date(h.start+'T00:00:00'),e=new Date(h.end+'T00:00:00');if(e<today)continue;const d=Math.max(Math.ceil((s-today)/86400000),0),dur=Math.ceil((e-s)/86400000)+1;if(!best||d<best.days)best={...h,days:d,dur};}
+  if(!best)return;
+  const remaining=holidays2026.filter(h=>new Date(h.end+'T00:00:00')>=today);
+  document.getElementById('holiday-card').innerHTML=`
+    <div class="flex items-center gap-2 mb-3"><span class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-lg">${best.icon}</span><h3 class="text-sm font-bold text-gray-900">下个假期</h3></div>
+    <div class="text-2xl sm:text-3xl font-black bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">${best.name}（${best.dur}天）</div>
+    <div class="mt-1 text-xs text-gray-400">${fmtShort(best.start)} – ${fmtShort(best.end)}</div>
+    ${best.days>0?`<div class="mt-2 text-sm text-gray-500">还有 <span class="text-emerald-600 font-black text-lg">${best.days}</span> 天</div>`:'<div class="mt-2 text-sm text-emerald-600 font-bold">🎉 正在放假中！</div>'}
+    <div class="mt-4 pt-3 border-t border-gray-100"><div class="text-[10px] text-gray-400 mb-1.5 font-medium">今年剩余假期</div>
+      <div class="flex flex-wrap gap-1.5">${remaining.map(h=>{const s=new Date(h.start+'T00:00:00'),e=new Date(h.end+'T00:00:00'),dur=Math.ceil((e-s)/86400000)+1;
+        return `<span class="tooltip-trigger relative text-[10px] px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 cursor-pointer hover:bg-emerald-100 transition-colors font-medium">${h.icon} ${h.name}<span class="tooltip absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 rounded-xl bg-gray-800 text-[10px] text-white whitespace-nowrap shadow-xl z-10">📅 ${fmtShort(h.start)} – ${fmtShort(h.end)}（${dur}天）</span></span>`;
+      }).join('')}</div></div>`;
+}
+
+function renderStock(){
+  document.getElementById('stock-bars').innerHTML=stockRanges.map((r,i)=>{const pct=Math.max((r.max/368)*100,4);
+    return `<div class="flex items-center gap-3"><span class="w-10 text-xs font-mono font-bold text-gray-500 shrink-0">${r.level}</span>
+      <div class="flex-1 h-8 bg-gray-100 rounded-xl overflow-hidden relative"><div class="h-full rounded-xl bg-gradient-to-r ${r.gradient} bar-animate" style="width:${pct}%;animation-delay:${i*60}ms"></div>
+      <span class="absolute inset-y-0 left-3 flex items-center text-xs font-bold text-gray-700 drop-shadow-sm">$${r.max}k</span></div></div>`;
+  }).join('');
+}
+
+function defaultCompCycleYear(){const now=new Date();return now.getMonth()>=8?now.getFullYear():now.getFullYear()-1;}
+function cycleLabel(y){return y==='unknown'?'不确定 / 还没看到最新 ratio':`${y} 年 9 月调薪后`;}
+function fmtWan(v){return v===null||v===undefined?'—':`${Number(v||0).toFixed(1)} 万`;}
+const COMP_SITE_ORDER=['北京','苏州','上海','远程/其他'];
+const COMP_CONF_TONE={高:{dot:'bg-emerald-500',text:'text-emerald-700',cellBg:'bg-emerald-50/40'},中:{dot:'bg-amber-500',text:'text-amber-700',cellBg:'bg-amber-50/40'},低:{dot:'bg-rose-500',text:'text-rose-700',cellBg:'bg-rose-50/40'}};
+
+function compCellHtml(g){
+  if(!g)return '<td class="py-3 px-3 text-center text-gray-300 border-b border-gray-50">—</td>';
+  const tone=COMP_CONF_TONE[g.confidence]||COMP_CONF_TONE['低'];
+  const midpoint=fmtWan(g.estimatedMidpointWan??g.medianMidpointWan);
+  const lo=fmtWan(g.p25EstimatedWan??g.p25MidpointWan);
+  const hi=fmtWan(g.p75EstimatedWan??g.p75MidpointWan);
+  const samples=`${g.currentCount||0} / ${g.historicalCount||0} / ${g.unknownCount||0}`;
+  return `<td class="py-3 px-3 border-b border-gray-50 ${tone.cellBg}">
+    <div class="flex items-baseline justify-center gap-1.5">
+      <span class="text-base font-bold text-sky-700">${midpoint}</span>
+      <span class="inline-flex items-center gap-1 text-[10px] ${tone.text}"><span class="w-1.5 h-1.5 rounded-full ${tone.dot}"></span>${g.confidence||'低'}</span>
+    </div>
+    <div class="mt-1 text-center text-[11px] text-gray-500">${lo} – ${hi}</div>
+    <div class="mt-0.5 text-center text-[10px] text-gray-400">${samples}</div>
+  </td>`;
+}
+
+function compUniqueSites(groups){
+  const seen=new Set(groups.map(g=>g.site));
+  const ordered=COMP_SITE_ORDER.filter(s=>seen.has(s));
+  const extras=[...seen].filter(s=>!COMP_SITE_ORDER.includes(s)).sort();
+  return ordered.concat(extras);
+}
+
+function renderCompTable(groups){
+  const head=document.getElementById('comp-table-head');
+  const body=document.getElementById('comp-table-body');
+  if(!head||!body)return;
+  const usable=(groups||[]).filter(g=>(g.estimatedMidpointWan??g.medianMidpointWan)!==null||(g.currentCount||0)+(g.historicalCount||0)>0);
+  if(usable.length===0){
+    head.innerHTML='<tr><th class="text-left py-2 px-3 font-medium">Level</th><th></th></tr>';
+    body.innerHTML='<tr><td colspan="2" class="py-6 text-center text-gray-400">暂无样本，欢迎贡献第一条匿名数据</td></tr>';
+    return;
+  }
+  const sites=compUniqueSites(usable);
+  const byLevel=new Map();
+  for(const g of usable){
+    if(!byLevel.has(g.level))byLevel.set(g.level,new Map());
+    byLevel.get(g.level).set(g.site,g);
+  }
+  const levels=[...byLevel.keys()].sort((a,b)=>a-b);
+  head.innerHTML=`<tr>
+    <th class="text-left py-2 px-3 font-medium sticky left-0 bg-white z-10 border-b border-gray-100">Level</th>
+    ${sites.map(s=>`<th class="text-center py-2 px-3 font-medium border-b border-gray-100">${s}</th>`).join('')}
+  </tr>`;
+  body.innerHTML=levels.map(level=>{
+    const row=byLevel.get(level);
+    return `<tr class="hover:bg-slate-50/40">
+      <td class="py-3 px-3 font-bold text-gray-700 sticky left-0 bg-white z-10 border-b border-gray-50">L${level}</td>
+      ${sites.map(s=>compCellHtml(row.get(s))).join('')}
+    </tr>`;
+  }).join('');
+}
+
+function initCompCycle(){
+  const select=document.getElementById('comp-cycle');
+  if(!select)return;
+  const now=new Date();
+  const current=now.getFullYear();
+  const years=now.getMonth()>=8?[current,current-1]:[current-1];
+  select.innerHTML=years.map(y=>`<option value="${y}">${cycleLabel(y)}</option>`).join('')+'<option value="unknown">不确定 / 还没看到最新 ratio</option>';
+}
+
+function getCompApiUrls(){
+  const urls=[];
+  if(typeof location!=='undefined'&&typeof location.origin==='string'&&/^https?:\/\//.test(location.origin)){
+    urls.push(`${location.origin}/api/compensation`);
+  }
+  urls.push('/api/compensation');
+  return [...new Set(urls)];
+}
+
+async function fetchCompApi(init){
+  let lastErr=new Error('读取失败');
+  for(const url of getCompApiUrls()){
+    try{
+      const res=await fetch(url,init);
+      if(!res.ok)throw new Error(`HTTP ${res.status}`);
+      return res;
+    }catch(err){
+      lastErr=err instanceof Error?err:new Error('读取失败');
+    }
+  }
+  throw lastErr;
+}
+
+async function loadCompensation(){
+  const tbody=document.getElementById('comp-table-body');
+  try{
+    const res=await fetchCompApi();
+    const data=await res.json();
+    const note=document.getElementById('comp-cycle-note');
+    const adjustmentPct=Math.round((Number(data.annualAdjustment||1.05)-1)*100);
+    if(note)note.textContent=`当前估算周期：${cycleLabel(data.targetCycleYear)}。历史周期样本按年化 ${adjustmentPct}% 折算并降低权重；不确定周期只计数，不参与默认估算。`;
+    renderCompTable(data.groups||[]);
+  }catch(err){
+    if(tbody)tbody.innerHTML='<tr><td class="py-6 text-center text-red-400">薪资数据加载失败，稍后再试</td></tr>';
+  }
+}
+
+async function submitCompensation(e){
+  e.preventDefault();
+  const errEl=document.getElementById('comp-error');
+  const okEl=document.getElementById('comp-ok');
+  const btn=document.getElementById('comp-submit');
+  errEl.style.display='none';okEl.style.display='none';
+  const payload={
+    level:document.getElementById('comp-level').value,
+    baseWan:document.getElementById('comp-base').value,
+    compaRatio:document.getElementById('comp-ratio').value,
+    site:document.getElementById('comp-site').value,
+    cycleYear:document.getElementById('comp-cycle').value,
+  };
+  btn.textContent='提交中...';btn.disabled=true;
+  try{
+    const res=await fetchCompApi({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok)throw new Error(data.error||'提交失败');
+    okEl.textContent=`已匿名提交：${payload.site} L${payload.level}（${cycleLabel(payload.cycleYear)}）midpoint ≈ ${fmtWan(data.submitted?.midpointWan)}。感谢贡献！`;
+    okEl.style.display='block';
+    document.getElementById('comp-base').value='';
+    document.getElementById('comp-ratio').value='';
+    renderCompTable(data.groups||[]);
+  }catch(err){
+    errEl.textContent=err.message||'提交失败';errEl.style.display='block';
+  }
+  btn.textContent='匿名提交';btn.disabled=false;
+}
+
+function calcSeveranceN(joinDate,refDate){
+  if(!(joinDate instanceof Date)||isNaN(joinDate))return null;
+  const ref=refDate instanceof Date&&!isNaN(refDate)?refDate:new Date();
+  let months=(ref.getFullYear()-joinDate.getFullYear())*12+(ref.getMonth()-joinDate.getMonth());
+  if(ref.getDate()<joinDate.getDate())months--;
+  if(months<0)return 0;
+  const years=Math.floor(months/12);
+  const rem=months-years*12;
+  let extra=0;
+  if(rem===0)extra=0;
+  else if(rem>6)extra=1;
+  else extra=0.5;
+  return years+extra;
+}
+
+function fmtSevYears(joinDate,refDate){
+  if(!(joinDate instanceof Date)||isNaN(joinDate))return '';
+  const ref=refDate instanceof Date&&!isNaN(refDate)?refDate:new Date();
+  let months=(ref.getFullYear()-joinDate.getFullYear())*12+(ref.getMonth()-joinDate.getMonth());
+  if(ref.getDate()<joinDate.getDate())months--;
+  if(months<0)return '';
+  const y=Math.floor(months/12);
+  const m=months-y*12;
+  return `服务 ${y} 年 ${m} 个月`;
+}
+
+function fmtMoney(v){return `${(Number(v)||0).toFixed(2)} 万`;}
+
+// 进位到最近的 0.5 天（HR Policy #302：小数按 0.5 进位）
+function ceilHalf(v){return Math.ceil((Number(v)||0)*2)/2;}
+
+// 法定年假上限（按社会工龄 = 年龄 − 22，HR Policy #302 Q7）
+// 不满 1 年 0 天；满 1 不满 10 年 5 天；满 10 不满 20 年 10 天；满 20 年 15 天
+function legalLeaveCap(socialTenure){
+  if(socialTenure===null||socialTenure<1)return 0;
+  if(socialTenure<10)return 5;
+  if(socialTenure<20)return 10;
+  return 15;
+}
+
+// 年资假应发总额：工龄超过 5 年即 +1 天，此后每超过一个周年再 +1 天，最多 5 天（HR Policy #302）
+// 按入职周年逐年判断，只要严格超过该周年（哪怕多 1 天）就计入，不用等满整年
+function seniorityLeaveCap(joinDate,refDate){
+  if(!(joinDate instanceof Date)||isNaN(joinDate))return 0;
+  const ref=refDate instanceof Date&&!isNaN(refDate)?refDate:new Date();
+  let cap=0;
+  for(let y=5;y<=9;y++){
+    const anniv=new Date(joinDate.getFullYear()+y,joinDate.getMonth(),joinDate.getDate());
+    if(ref>anniv)cap++;
+  }
+  return cap;
+}
+
+// 宽容解析用户手输的日期。日期框是普通文本框（原生 date 控件在部分系统上会显示成
+// "yyyy/mm/日" 这种中英混排），所以必须接受 2019-03-01 / 2019/3/1 / 2019.3.1 /
+// 20190301 / 2019年3月1日 等写法，不能直接 new Date(str+'T00:00:00')。
+function parseLooseDate(str){
+  const s=String(str||'').trim();
+  if(!s)return null;
+  let y,m,d;
+  let mt=s.match(/^(\d{4})\s*[-/.年]\s*(\d{1,2})\s*[-/.月]\s*(\d{1,2})\s*日?$/);
+  if(mt){ y=+mt[1]; m=+mt[2]; d=+mt[3]; }
+  else if((mt=s.match(/^(\d{4})(\d{2})(\d{2})$/))){ y=+mt[1]; m=+mt[2]; d=+mt[3]; }
+  else return null;
+  if(m<1||m>12||d<1||d>31)return null;
+  const dt=new Date(y,m-1,d);
+  // 反查，挡掉 2 月 30 日这类会被自动进位的非法日期
+  if(dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==d)return null;
+  return dt;
+}
+
+function calcSeverance(){
+  const joinStr=document.getElementById('sev-join').value;
+  const base=Number(document.getElementById('sev-base').value)||0;
+  const bonus=Number(document.getElementById('sev-bonus').value)||0;
+  const x=Number(document.getElementById('sev-x').value)||0;
+  const ageRaw=document.getElementById('sev-age').value;
+  const leaveDateStr=document.getElementById('sev-leave-date').value;
+  const curAllow=Number(document.getElementById('sev-cur-allow').value)||0;
+  const carryAllow=Number(document.getElementById('sev-carry-allow').value)||0;
+  const seniority=Number(document.getElementById('sev-seniority').value)||0;
+  const joinDate=parseLooseDate(joinStr);
+  const leaveDate=parseLooseDate(leaveDateStr);
+  // N 的参考日：优先用离职日期，否则今天
+  const refDate=leaveDate||new Date();
+  const N=joinDate?calcSeveranceN(joinDate,refDate):null;
+  // 填了但认不出来时要明说，否则用户只看到「—」不知道是格式问题
+  const nNote=joinDate?fmtSevYears(joinDate,refDate)
+    :(joinStr.trim()?'日期格式认不出，请按 2019-03-01 填写':'请填写入职日期');
+  const mN=(base+bonus)/12;
+  const mX=base/12;
+  // 法定封顶（可选）：月工资（含 Bonus）超当地社平工资 3 倍时，N 部分按"社平 3 倍 × 最多 12 年"计算
+  // 不填当地社平工资则不封顶（多数人月薪未必超社平 3 倍，強行封顶反而算少）
+  const avgWage=Number(document.getElementById('sev-avg-wage').value)||0;
+  const avgWage3x=avgWage>0?avgWage*3/10000:0; // 转换为万元/月，方便和 mN 比较
+  const capApplied=avgWage>0&&mN>avgWage3x;
+  const cappedN=capApplied?(N===null?null:Math.min(N,12)):N;
+  const cappedMN=capApplied?avgWage3x:mN;
+  const partN=(cappedN||0)*cappedMN;
+  const partX=x*mX;
+  // 社会工龄 = 年龄 − 22（HR Policy #302 Q7）→ 全年法定年假上限
+  const socialTenure=ageRaw===''?null:Math.max(0,(Number(ageRaw)||0)-22);
+  const fullYearLegal=legalLeaveCap(socialTenure);
+  // 微软年假总额固定 15 天（法定 + 公司补充）；请假时法定年假优先消耗（HR Policy #302 Q8），
+  // 所以"剩余"里的法定份额只会在公司补充额度耗尽后才被侵蚀，不能直接按 min(法定上限, 剩余) 估算
+  const fullYearSupp=15-fullYearLegal;
+  // 今年折算系数 = 当年服务日历天数 / 365
+  let frac=1,serviceDays=null;
+  if(leaveDate&&!isNaN(leaveDate)){
+    const yearStart=new Date(leaveDate.getFullYear(),0,1);
+    serviceDays=Math.floor((leaveDate-yearStart)/86400000)+1;
+    frac=serviceDays/365;
+  }
+  // 去年结转：上一年已结账，法定/公司补充独立拆分（法定优先消耗），不折算
+  const carryLegal=Math.max(0,carryAllow-fullYearSupp);
+  const carrySupp=Math.min(carryAllow,fullYearSupp);
+  // 年资假应发总额（工作满 5 年后每年 +1 天，最多 5 天）
+  const seniorityCap=joinDate?seniorityLeaveCap(joinDate,refDate):0;
+  // 今年年假 + 年资假同属"当前周期"：不管请假实际记在哪个类别下，扣减时一律先吃法定年假（200%），
+  // 剩余额度按"先补充、后年资"的顺序兜底，各自按离职日折算、进位 0.5（年资假不折算）
+  const curTotalUsed=Math.max(0,15-curAllow)+Math.max(0,seniorityCap-seniority);
+  const curLegalRaw=Math.max(0,fullYearLegal-curTotalUsed);
+  const curSuppOverflow=Math.max(0,curTotalUsed-fullYearLegal);
+  const curSuppRaw=Math.max(0,fullYearSupp-curSuppOverflow);
+  const seniorityRaw=Math.max(0,(curAllow+seniority)-curLegalRaw-curSuppRaw);
+  const curLegal=ceilHalf(curLegalRaw*frac);
+  const curSupp=ceilHalf(curSuppRaw*frac);
+  // 汇总：法定（200%）= 结转法定 + 今年折算法定；公司/年资（100%）= 结转补充 + 今年折算补充 + 年资假
+  const leaveLegal=carryLegal+curLegal;
+  const leaveExtra=carrySupp+curSupp+seniorityRaw;
+  const leaveTotal=leaveLegal+leaveExtra;
+  // 拆分预览提示
+  const hint=document.getElementById('sev-legal-hint');
+  if(hint){
+    if(socialTenure===null&&(curAllow>0||carryAllow>0)){
+      hint.innerHTML='⚠️ 请填年龄，否则法定/公司无法拆分（社会工龄 = 年龄 − 22）';
+    }else if(curAllow>0||carryAllow>0||seniority>0){
+      const fr=leaveDate?`今年折算 ×${frac.toFixed(3)}（服务 ${serviceDays} 天）`:'今年未折算（请填离职日期）';
+      hint.innerHTML=`社会工龄 ${socialTenure===null?'—':socialTenure} 年 → 全年法定 ${fullYearLegal} 天（年资假上限 ${seniorityCap} 天）· ${fr}｜`+
+        `<b class="text-violet-700">法定 ${leaveLegal} 天（200%）</b>：结转 ${carryLegal} + 今年 ${curLegal}；`+
+        `<b class="text-violet-700">公司/年资 ${leaveExtra} 天（100%）</b>：结转补充 ${carrySupp} + 今年补充 ${curSupp} + 年资 ${seniorityRaw}`+
+        `（不管休假记在哪个类别，一律先扣法定年假）`;
+    }else{
+      hint.textContent='';
+    }
+  }
+  // 日工资（元） = 前 12 个月平均月薪（含已发 Bonus）× 10000 / 21.75（HR Policy #302 Q9/Q10）
+  const dailyYuan=(base+bonus)>0?(mN*10000/21.75):0;
+  const leaveLegalAmt=leaveLegal*dailyYuan*2/10000;
+  const leaveExtraAmt=leaveExtra*dailyYuan/10000;
+  const total=partN+partX+leaveLegalAmt+leaveExtraAmt;
+  const hasAny=N!==null||x>0||leaveTotal>0;
+  document.getElementById('sev-n').textContent=N===null?'—':N.toFixed(1);
+  document.getElementById('sev-n-note').textContent=capApplied?`${nNote} · 已按社平 3 倍封顶`:nNote;
+  document.getElementById('sev-mn').textContent=base+bonus>0?fmtMoney(mN):'—';
+  document.getElementById('sev-mx').textContent=base>0?fmtMoney(mX):'—';
+  const capNote=capApplied?` <span class="text-violet-500">（月薪超社平 3 倍，按 ${cappedN.toFixed(1)} 年 × 社平 3 倍 ${cappedMN.toFixed(2)} 万 封顶）</span>`:'';
+  document.getElementById('sev-line-n').innerHTML=N===null?'—':`${cappedN.toFixed(1)} <span class="sev-op">×</span> ${cappedMN.toFixed(2)} 万 <span class="sev-op">=</span> <b>${partN.toFixed(2)} 万</b>${capNote}`;
+  document.getElementById('sev-line-x').innerHTML=x>0?`${x} <span class="sev-op">×</span> ${mX.toFixed(2)} 万 <span class="sev-op">=</span> <b>${partX.toFixed(2)} 万</b>`:'—';
+  const legalBreak=(carryLegal>0||curLegal>0)?` <span class="text-gray-400">(结转 ${carryLegal} + 今年 ${curLegal})</span>`:'';
+  const extraBreak=(carrySupp>0||curSupp>0||seniorityRaw>0)?` <span class="text-gray-400">(结转补充 ${carrySupp} + 今年补充 ${curSupp} + 年资 ${seniorityRaw})</span>`:'';
+  document.getElementById('sev-line-leave-legal').innerHTML=(leaveLegal>0&&dailyYuan>0)?`${leaveLegal} 天${legalBreak} <span class="sev-op">×</span> ${Math.round(dailyYuan)} 元 <span class="sev-op">×</span> 200% <span class="sev-op">=</span> <b>${leaveLegalAmt.toFixed(2)} 万</b>`:'—';
+  document.getElementById('sev-line-leave-extra').innerHTML=(leaveExtra>0&&dailyYuan>0)?`${leaveExtra} 天${extraBreak} <span class="sev-op">×</span> ${Math.round(dailyYuan)} 元 <span class="sev-op">×</span> 100% <span class="sev-op">=</span> <b>${leaveExtraAmt.toFixed(2)} 万</b>`:'—';
+  document.getElementById('sev-total').textContent=hasAny?fmtMoney(total):'—';
+}
+
+function bindSeveranceInputs(){
+  ['sev-join','sev-base','sev-bonus','sev-x','sev-avg-wage','sev-age','sev-leave-date','sev-cur-allow','sev-carry-allow','sev-seniority'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.addEventListener('input',calcSeverance);
+  });
+  calcSeverance();
+}
+
+// 补充福利信息：提交到 /api/benefits（管理员审核后合并到正式清单，不会直接展示）
+async function submitContribute(e){
+  e.preventDefault();
+  const benefit=document.getElementById('c-benefit').value.trim();
+  const description=document.getElementById('c-desc').value.trim();
+  const link=document.getElementById('c-link').value.trim();
+  const contact=document.getElementById('c-contact').value.trim();
+  const errEl=document.getElementById('c-error');
+  const submitBtn=document.getElementById('c-submit');
+  errEl.style.display='none';
+  if(benefit.length<2){ errEl.textContent='福利名称太短'; errEl.style.display='block'; return; }
+  if(description.length<10){ errEl.textContent='描述至少 10 字'; errEl.style.display='block'; return; }
+  submitBtn.disabled=true;
+  submitBtn.textContent='提交中…';
+  try{
+    const res=await fetch('/api/benefits',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({company:'微软',benefit,description,link,contact}),
+    });
+    if(!res.ok){
+      const data=await res.json().catch(()=>({}));
+      throw new Error(data.error||'提交失败');
+    }
+    document.getElementById('contribute-form').style.display='none';
+    document.getElementById('contribute-success').style.display='block';
+    document.getElementById('c-benefit').value='';
+    document.getElementById('c-desc').value='';
+    document.getElementById('c-link').value='';
+    document.getElementById('c-contact').value='';
+  }catch(err){
+    errEl.textContent=err.message||'提交失败，请稍后重试';
+    errEl.style.display='block';
+  }finally{
+    submitBtn.disabled=false;
+    submitBtn.textContent='提交建议';
+  }
+}
+
+renderFilters();renderTagBar();renderCards();renderPayday();renderHoliday();renderStock();initCompCycle();loadCompensation();bindSeveranceInputs();
+
+// Page view tracking
+try{fetch('/api/stats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({page:'/benefits/ms'})}).catch(()=>{});}catch{}
+
+// Tab view tracking（每次切换 tab 记一次，用于统计各 tab 访问占比）
+function trackTab(name){
+  if(!['benefits','payday','calc','boss'].includes(name))return;
+  try{fetch('/api/stats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({page:'/benefits/ms/tab/'+name})}).catch(()=>{});}catch{}
+}
+
+/* ========== 老板避雷榜（匿名结构化打分） ========== */
+const BOSS_API = '/api/boss';
+// 服务端未开 BOSS_PUBLIC 时需要 token；?boss=<token> 存本地。开了公开模式则无需 key
+function bossKey(){ return (localStorage.getItem('tf_boss_key')||'').trim(); }
+// 设备 id：用来区分同一个 NAT 出口（比如公司办公网）后面的不同同事，
+// 否则全公司会被折叠成一票、永远凑不满解锁票数
+function bossCid(){
+  let c=localStorage.getItem('tf_boss_cid');
+  if(!c){
+    c=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now().toString(36));
+    localStorage.setItem('tf_boss_cid',c);
+  }
+  return c;
+}
+function bossQ(){ const k=bossKey(); return k?('?token='+encodeURIComponent(k)):''; }
+let __bossDims=[], __bossTags={positive:[],negative:[]}, __bossScores={}, __bossPicked=new Set(), __bossReady=false;
+
+(function initBossGate(){
+  try{
+    const p=new URLSearchParams(location.search).get('boss');
+    if(p){ localStorage.setItem('tf_boss_key', p.trim()); }
+  }catch{}
+})();
+
+// 依次尝试同源和 techflow 域；404 不会让 fetch reject，所以必须显式判断 res.ok 再回退
+function getBossApiUrls(){
+  const urls=[];
+  if(typeof location!=='undefined'&&/^https?:\/\//.test(location.origin)){ urls.push(`${location.origin}/api/boss`); }
+  // Same-origin API only; a static host will keep this panel hidden.
+  return [...new Set(urls)];
+}
+async function bossApi(init){
+  let lastRes=null,lastErr=null;
+  for(const url of getBossApiUrls()){
+    try{
+      const res=await fetch(url+bossQ(),init);
+      if(res.ok) return res;
+      lastRes=res;                 // 401/400 等业务错误留到最后返回，交给调用方读 error
+    }catch(err){ lastErr=err; }
+  }
+  if(lastRes) return lastRes;
+  throw lastErr||new Error('网络错误');
+}
+
+// 探测可用性：公开模式直接 200；私有模式需本地有 key。都不行就保持隐藏
+async function initBoss(){
+  try{
+    const res=await bossApi();
+    if(!res.ok) return;                       // 401 → 无权限，tab 保持隐藏
+    const data=await res.json();
+    __bossDims=data.dimensions||[];
+    __bossTags=data.tags||{positive:[],negative:[]};
+    __bossReady=true;
+    document.querySelectorAll('.boss-gated').forEach(el=>{ el.style.display=''; });
+    renderBossForm();
+    renderBossList(data);
+    // initTab() 早于本异步探测执行，?tab=boss 当时会被打回 benefits，这里补一次
+    try{
+      if(new URLSearchParams(location.search).get('tab')==='boss'){ switchTab('boss'); }
+      else { updateTabIndicators(document.querySelector('[data-panel].is-active')?.dataset.panel||'benefits'); }
+    }catch{}
+  }catch{ /* 静默失败，功能不可见 */ }
+}
+
+function renderBossForm(){
+  const dimBox=document.getElementById('boss-dims');
+  if(dimBox){
+    dimBox.innerHTML=__bossDims.map(d=>`
+      <div class="flex items-center gap-2 flex-wrap">
+        <div class="w-full sm:w-36 shrink-0">
+          <div class="text-[13px] font-medium text-gray-700">${d.label}</div>
+          <div class="text-[10px] text-gray-400 leading-tight">${d.hint}</div>
+        </div>
+        <div class="flex gap-1" data-dim="${d.key}">
+          ${[1,2,3,4,5].map(n=>`<button type="button" onclick="pickBossScore('${d.key}',${n})" data-score="${n}"
+            class="boss-dot w-8 h-8 rounded-lg border border-gray-200 bg-white text-[12px] text-gray-400 hover:border-teal-300 transition-colors">${n}</button>`).join('')}
+        </div>
+      </div>`).join('');
+  }
+  const tagBox=document.getElementById('boss-tags');
+  if(tagBox){
+    const chip=(t,positive)=>`<button type="button" onclick="toggleBossTag('${t}')" data-tag="${t}"
+      class="boss-chip px-2.5 py-1 rounded-full text-[12px] border transition-colors ${positive?'border-emerald-200 text-emerald-600 bg-emerald-50/50':'border-rose-200 text-rose-600 bg-rose-50/50'}">${t}</button>`;
+    tagBox.innerHTML=[...__bossTags.positive.map(t=>chip(t,true)),...__bossTags.negative.map(t=>chip(t,false))].join('');
+  }
+}
+
+function pickBossScore(key,n){
+  __bossScores[key]=n;
+  document.querySelectorAll(`[data-dim="${key}"] .boss-dot`).forEach(b=>{
+    const on=Number(b.dataset.score)<=n;
+    b.classList.toggle('bg-teal-500',on);
+    b.classList.toggle('text-white',on);
+    b.classList.toggle('border-teal-500',on);
+    b.classList.toggle('text-gray-400',!on);
+    b.classList.toggle('bg-white',!on);
+  });
+}
+
+function toggleBossTag(t){
+  const btn=document.querySelector(`.boss-chip[data-tag="${CSS.escape(t)}"]`);
+  if(__bossPicked.has(t)){ __bossPicked.delete(t); }
+  else{
+    if(__bossPicked.size>=4){ return; }
+    __bossPicked.add(t);
+  }
+  if(btn) btn.classList.toggle('ring-2', __bossPicked.has(t));
+  if(btn) btn.classList.toggle('ring-offset-1', __bossPicked.has(t));
+}
+
+function bossBar(v){
+  const pct=Math.max(0,Math.min(100,(v-1)/4*100));
+  const color=v>=4?'bg-emerald-500':v>=3?'bg-teal-500':v>=2?'bg-amber-500':'bg-rose-500';
+  return `<div class="h-1.5 rounded-full bg-gray-100 overflow-hidden"><div class="h-full ${color}" style="width:${pct}%"></div></div>`;
+}
+
+function renderBossList(data){
+  const box=document.getElementById('boss-list');
+  const note=document.getElementById('boss-count-note');
+  if(!box)return;
+  const groups=data.groups||[];
+  const minSample=data.minSample||5;
+  if(note) note.textContent=`共 ${groups.length} 个条目 · 满 ${minSample} 票公开分数`;
+  if(!groups.length){
+    box.innerHTML='<div class="py-10 text-center text-gray-400 text-sm">还没有人打分，来当第一个吧</div>';
+    return;
+  }
+  box.innerHTML=groups.map(g=>{
+    if(g.locked){
+      return `<div class="rounded-xl border border-dashed border-gray-200 bg-gray-50/60 px-4 py-3 flex items-center justify-between gap-3">
+        <div class="min-w-0">
+          <div class="text-sm font-semibold text-gray-500 truncate">${g.codename} <span class="text-[11px] font-normal text-gray-400">· ${g.org}</span></div>
+          <div class="text-[11px] text-gray-400 mt-0.5">${g.needsMoreNets
+            ? '票数够了，但都来自同一个网络，需要更多不同来源的人打分'
+            : `样本积累中，满 ${minSample} 票后才公开分数`}</div>
+        </div>
+        <div class="shrink-0 text-right">
+          <div class="text-sm font-bold text-gray-400">${g.count}/${minSample}</div>
+          <div class="text-[10px] text-gray-300">票</div>
+        </div>
+      </div>`;
+    }
+    const tone=g.overall>=4?'text-emerald-600':g.overall>=3?'text-teal-600':g.overall>=2?'text-amber-600':'text-rose-600';
+    return `<div class="rounded-xl border border-gray-200 bg-white px-4 py-3">
+      <div class="flex items-start justify-between gap-3 mb-2.5">
+        <div class="min-w-0">
+          <div class="text-sm font-bold text-gray-800 truncate">${g.codename} <span class="text-[11px] font-normal text-gray-400">· ${g.org}</span></div>
+          <div class="text-[11px] text-gray-400 mt-0.5">${g.count} 票 · 中位数</div>
+        </div>
+        <div class="shrink-0 text-right">
+          <div class="text-2xl font-black ${tone} leading-none">${g.overall.toFixed(1)}</div>
+          <div class="text-[10px] text-gray-400 mt-0.5">综合 / 5</div>
+        </div>
+      </div>
+      <div class="grid gap-x-4 gap-y-1.5 sm:grid-cols-2">
+        ${__bossDims.map(d=>`<div class="flex items-center gap-2">
+          <span class="w-16 shrink-0 text-[11px] text-gray-500">${d.label}</span>
+          <span class="flex-1">${bossBar(g.dims[d.key])}</span>
+          <span class="w-6 shrink-0 text-[11px] text-gray-600 text-right">${g.dims[d.key].toFixed(1)}</span>
+        </div>`).join('')}
+      </div>
+      ${g.tags&&g.tags.length?`<div class="mt-2.5 flex flex-wrap gap-1.5">${g.tags.map(t=>
+        `<span class="px-2 py-0.5 rounded-full bg-gray-100 text-[11px] text-gray-600">${t.tag} ×${t.count}</span>`).join('')}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+async function submitBoss(e){
+  e.preventDefault();
+  const errEl=document.getElementById('boss-error'), okEl=document.getElementById('boss-ok'), btn=document.getElementById('boss-submit');
+  errEl.style.display='none'; okEl.style.display='none';
+  const missing=__bossDims.filter(d=>!__bossScores[d.key]);
+  if(missing.length){
+    errEl.textContent=`还有 ${missing.length} 个维度没打分：${missing.map(d=>d.label).join('、')}`;
+    errEl.style.display='';
+    return false;
+  }
+  const payload={
+    org:document.getElementById('boss-org').value,
+    codename:document.getElementById('boss-codename').value,
+    scores:__bossScores,
+    tags:[...__bossPicked],
+    cid:bossCid(),
+  };
+  btn.textContent='提交中...'; btn.disabled=true;
+  try{
+    const res=await bossApi({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok) throw new Error(data.error||'提交失败');
+    const g=data.group;
+    okEl.textContent=g&&g.locked
+      ? `已记录！该条目当前 ${g.count}/${data.minSample} 票，满 ${data.minSample} 票后才会公开分数。`
+      : '已记录，感谢贡献！';
+    okEl.style.display='';
+    renderBossList({groups:data.groups,minSample:data.minSample});
+    __bossScores={}; __bossPicked.clear(); renderBossForm();
+  }catch(err){
+    errEl.textContent=err instanceof Error?err.message:'提交失败';
+    errEl.style.display='';
+  }finally{
+    btn.textContent='匿名提交打分'; btn.disabled=false;
+  }
+  return false;
+}
+
+initBoss();
+
+/* ========== PWA：底部分栏 / 安装 / 发薪日通知 ========== */
+const PUSH_API = '/api/push';
+
+// 底部 tab 切换（桌面顶部 tab + 移动端底部 tab 同步）
+function switchTab(name){
+  if(name==='boss' && !__bossReady){ name='benefits'; }
+  document.querySelectorAll('[data-panel]').forEach(p=>p.classList.toggle('is-active', p.dataset.panel===name));
+  document.querySelectorAll('.tabbar-btn').forEach(b=>b.classList.toggle('tabbar-active', b.dataset.tab===name));
+  document.querySelectorAll('.toptab-btn').forEach(b=>b.classList.toggle('toptab-active', b.dataset.tab===name));
+  requestAnimationFrame(()=>updateTabIndicators(name));
+  const _hint=document.getElementById('toptab-hint'); if(_hint) _hint.style.display='none';
+  try{ window.scrollTo({ top:0, behavior:'instant' }); }catch{ window.scrollTo(0,0); }
+  try{ trackTab(name); }catch{}
+}
+function updateTabIndicators(name){
+  const sync = (barSelector, btnSelector, indicatorSelector)=>{
+    const bar=document.querySelector(barSelector), btn=document.querySelector(`${btnSelector}[data-tab="${name}"]`), ind=document.querySelector(indicatorSelector);
+    if(!bar||!btn||!ind) return;
+    const br=bar.getBoundingClientRect(), rr=btn.getBoundingClientRect();
+    ind.style.left = `${rr.left-br.left}px`;
+    ind.style.right = `${br.right-rr.right}px`;
+  };
+  sync('#top-tabbar .toptab-track','.toptab-btn','#top-tabbar .toptab-indicator');
+  sync('#mobile-tabbar','.tabbar-btn','#mobile-tabbar .tabbar-indicator');
+}
+window.addEventListener('load', ()=>updateTabIndicators(document.querySelector('[data-panel].is-active')?.dataset.panel || 'benefits'));
+window.addEventListener('resize', ()=>updateTabIndicators(document.querySelector('[data-panel].is-active')?.dataset.panel || 'benefits'));
+// 支持 ?tab=payday / ?tab=calc 直达（PWA 快捷方式）
+(function initTab(){
+  const t = new URLSearchParams(location.search).get('tab');
+  if(t && ['benefits','payday','calc','boss'].includes(t)){ switchTab(t); }
+  else { try{ trackTab('benefits'); }catch{} }
+})();
+
+// 注册 Service Worker + 自动检测新版本
+let __swReg = null, __reloading = false;
+if('serviceWorker' in navigator){
+  const hadController = !!navigator.serviceWorker.controller; // 首次安装为 false，避免首访无谓刷新
+  window.addEventListener('load', async ()=>{
+    try{
+      const reg = await navigator.serviceWorker.register('./sw.js', { scope:'./' });
+      __swReg = reg;
+      reg.update().catch(()=>{});               // 打开即查一次
+      reg.addEventListener('updatefound', ()=>{  // 发现新版本
+        const nw = reg.installing;
+        if(!nw) return;
+        nw.addEventListener('statechange', ()=>{
+          if(nw.state === 'installed' && navigator.serviceWorker.controller){ showUpdateToast(); }
+        });
+      });
+    }catch{}
+  });
+  // 新 SW 接管 → 自动刷新一次（仅限“更新”，非首次安装）
+  navigator.serviceWorker.addEventListener('controllerchange', ()=>{
+    if(!hadController || __reloading) return;
+    __reloading = true;
+    location.reload();
+  });
+  // 回到前台 / 每 30 分钟 主动查新
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && __swReg) __swReg.update().catch(()=>{}); });
+  setInterval(()=>{ if(__swReg) __swReg.update().catch(()=>{}); }, 30*60*1000);
+}
+
+function showUpdateToast(){
+  if(document.getElementById('update-toast')) return;
+  const t = document.createElement('div');
+  t.id = 'update-toast';
+  t.className = 'fixed left-1/2 -translate-x-1/2 z-[60] bottom-24 sm:bottom-6 px-4 py-2.5 rounded-full bg-gray-900 text-white text-sm shadow-2xl flex items-center gap-3 fade-up';
+  t.innerHTML = '<span>🎉 发现新版本</span><button onclick="applyUpdate()" class="px-3 py-1 rounded-full bg-gradient-to-r from-blue-500 to-violet-500 text-white text-xs font-semibold cursor-pointer">立即刷新</button>';
+  document.body.appendChild(t);
+}
+// 应用更新：让等待中的 SW 立即接管（触发 controllerchange 自动刷新），否则强制刷新
+function applyUpdate(){
+  if(__swReg && __swReg.waiting){ __swReg.waiting.postMessage('SKIP_WAITING'); setTimeout(()=>hardRefresh(null, { skipCacheDelete: true }), 1200); }
+  else hardRefresh();
+}
+// 手动刷新：网络优先拉最新版。不要先删缓存，否则 iOS PWA 下重载期间可能短暂白屏。
+async function hardRefresh(btn, opts={}){
+  const oldText = btn ? btn.innerHTML : '';
+  if(btn){ btn.disabled = true; btn.setAttribute('aria-busy','true'); btn.innerHTML = btn.id === 'floating-refresh' ? '⏳' : '<span>⏳ 正在更新...</span>'; }
+  try{
+    if(__swReg) await __swReg.update().catch(()=>{});
+    if(!opts.skipCacheDelete && 'caches' in window){
+      const ks = await caches.keys();
+      await Promise.all(ks.filter(k=>k.startsWith('benefits-ms-') && k !== 'benefits-ms-open-v1').map(k=>caches.delete(k)));
+    }
+  }catch{}
+  __reloading = true;
+  const next = new URL(location.href);
+  next.searchParams.set('_r', Date.now().toString());
+  try { location.replace(next.toString()); }
+  catch { location.reload(); }
+  setTimeout(()=>{ if(btn){ btn.disabled=false; btn.removeAttribute('aria-busy'); btn.innerHTML=oldText; } }, 3500);
+}
+
+// 安装到主屏幕（beforeinstallprompt）
+let deferredPrompt = null;
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+
+// ==== PWA 使用统计（桌面安装 / 打开）====
+const STATS_API = '/api/stats';
+function pwaAnonId(){ try{ let id=localStorage.getItem('pwa-aid'); if(!id){ id=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():(Date.now().toString(36)+Math.random().toString(16).slice(2)); localStorage.setItem('pwa-aid',id);} return id; }catch{ return ''; } }
+function trackEvent(event, extra){ try{ fetch(STATS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({event},extra||{}))}).catch(()=>{});}catch{} }
+// 以 PWA 方式（已存到桌面）打开：每会话上报一次，服务端按设备 id 去重
+if(isStandalone){ try{ if(!sessionStorage.getItem('pwa-open-sent')){ sessionStorage.setItem('pwa-open-sent','1'); trackEvent('pwa_open',{id:pwaAnonId()}); } }catch{ trackEvent('pwa_open',{id:pwaAnonId()}); } }
+
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById('install-btn');
+  if(btn) btn.style.display = 'block';
+});
+async function triggerInstall(){
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  const btn = document.getElementById('install-btn');
+  if(btn && outcome==='accepted') btn.style.display='none';
+}
+window.addEventListener('appinstalled', ()=>{
+  trackEvent('pwa_install', { id: pwaAnonId() });
+  const btn = document.getElementById('install-btn');
+  if(btn) btn.style.display='none';
+  const tip = document.getElementById('pwa-install-tip');
+  if(tip) tip.textContent = '✅ 已添加到主屏幕，下次直接从桌面图标打开。';
+});
+// 初始化安装卡片提示
+(function initInstallCard(){
+  if(isStandalone){
+    const card = document.getElementById('pwa-install-card');
+    if(card) card.style.display='none';
+    const save = document.getElementById('floating-save');
+    if(save) save.style.display='none';
+    const refresh = document.getElementById('floating-refresh');
+    if(refresh) refresh.style.display='flex';
+    return;
+  }
+  if(isIOS){
+    const tip = document.getElementById('ios-install-tip');
+    if(tip) tip.style.display='block';
+  }
+})();
+
+// 发薪日通知：订阅设置弹窗 + 订阅推送
+function urlBase64ToUint8Array(base64String){
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g,'+').replace(/_/g,'/');
+  const raw = atob(base64);
+  const arr = new Uint8Array(raw.length);
+  for(let i=0;i<raw.length;i++) arr[i]=raw.charCodeAt(i);
+  return arr;
+}
+function setNotifyState(text, tone){
+  const el = document.getElementById('notify-state');
+  if(!el) return;
+  el.textContent = text;
+  el.className = 'mt-2 text-[11px] ' + (tone==='ok' ? 'text-emerald-600' : tone==='err' ? 'text-rose-500' : 'text-gray-400');
+}
+
+// 计算距今最近、尚未过去的发薪日（与服务端一致）
+function upcomingPayday(){
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let p = getNthLastBizDay(now.getFullYear(), now.getMonth(), 3);
+  if(p < today){ const nm=now.getMonth()+1, ny=nm>11?now.getFullYear()+1:now.getFullYear(); p=getNthLastBizDay(ny, nm%12, 3); }
+  return p;
+}
+
+const NM_PREFS_KEY = 'nm-prefs-v1';
+function loadPrefs(){ try{ return JSON.parse(localStorage.getItem(NM_PREFS_KEY)||'null'); }catch{ return null; } }
+function savePrefs(p){ try{ localStorage.setItem(NM_PREFS_KEY, JSON.stringify(p)); }catch{} }
+
+async function currentSubscription(){
+  if(!('serviceWorker' in navigator) || !('PushManager' in window)) return null;
+  try{ const reg = await navigator.serviceWorker.ready; return await reg.pushManager.getSubscription(); }catch{ return null; }
+}
+
+function openNotifyModal(){
+  const modal = document.getElementById('notify-modal');
+  // 本月发薪日
+  const p = upcomingPayday();
+  document.getElementById('nm-payday').textContent = fmtDate(p);
+  const d = daysUntil(p);
+  document.getElementById('nm-payday-sub').textContent = d>0 ? `还有 ${d} 天` : (d===0 ? '🎉 就是今天' : '');
+  // 日期下拉 1-28
+  const domSel = document.getElementById('nm-dom');
+  if(domSel && !domSel.options.length){
+    domSel.innerHTML = Array.from({length:28},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
+    domSel.value = String(Math.min(28, Math.max(1, p.getDate()-1)));
+  }
+  // 回填已保存偏好
+  const saved = loadPrefs();
+  if(saved){
+    document.getElementById('nm-payday-on').checked = saved.payday !== false;
+    if(saved.dom){ document.querySelector('input[name="nm-when"][value="custom"]').checked = true; if(domSel) domSel.value = String(saved.dom); }
+    else { document.querySelector('input[name="nm-when"][value="default"]').checked = true; }
+  }
+  // 状态：是否已订阅
+  currentSubscription().then(sub=>{
+    const enabled = !!sub && Notification.permission==='granted';
+    document.getElementById('nm-save').textContent = enabled ? '更新提醒设置' : '保存并开启通知';
+    document.getElementById('nm-unsub').style.display = enabled ? 'block' : 'none';
+  });
+  // iOS 提示
+  document.getElementById('nm-ios-tip').style.display = (isIOS && !isStandalone) ? 'block' : 'none';
+  const _ua = navigator.userAgent;
+  const _isSafari = /safari/i.test(_ua) && !/chrome|crios|edg|android|fxios/i.test(_ua);
+  const _isMobile = /iphone|ipad|ipod|android|mobile/i.test(_ua);
+  document.getElementById('nm-desktop-tip').style.display = (!_isMobile && !_isSafari) ? 'block' : 'none';
+  document.getElementById('nm-msg').textContent = '';
+  modal.style.display = 'flex';
+}
+
+function readModalPrefs(){
+  const payday = document.getElementById('nm-payday-on').checked;
+  const when = (document.querySelector('input[name="nm-when"]:checked')||{}).value || 'default';
+  const dom = when==='custom' ? Number(document.getElementById('nm-dom').value)||null : null;
+  return { payday, dom };
+}
+function nmMsg(text, tone){
+  const el = document.getElementById('nm-msg'); if(!el) return;
+  el.textContent = text;
+  el.className = 'mt-3 text-[12px] leading-relaxed ' + (tone==='ok'?'text-emerald-600':tone==='err'?'text-rose-500':'text-gray-400');
+}
+
+async function saveNotify(){
+  const btn = document.getElementById('nm-save');
+  const prefs = readModalPrefs();
+  if(!prefs.payday){ return unsubNotify(); }
+  if(!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)){
+    nmMsg((isIOS && !isStandalone) ? 'iPhone 请先「添加到主屏幕」并从桌面图标打开后再试。' : '当前浏览器不支持推送通知。', 'err');
+    return;
+  }
+  try{
+    btn.disabled = true; const old = btn.textContent; btn.textContent = '处理中...';
+    const perm = await Notification.requestPermission();
+    if(perm !== 'granted'){ nmMsg('未授予通知权限，可在浏览器设置里重新开启。', 'err'); btn.disabled=false; btn.textContent=old; return; }
+    const { publicKey } = await fetch(PUSH_API).then(r=>r.json()).catch(()=>({}));
+    if(!publicKey){ nmMsg('服务端暂未配置推送，稍后再试。', 'err'); btn.disabled=false; btn.textContent=old; return; }
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if(!sub){
+      sub = await Promise.race([
+        reg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey: urlBase64ToUint8Array(publicKey) }),
+        new Promise((_, rej)=>setTimeout(()=>rej(new Error('__push_timeout__')), 15000))
+      ]);
+    }
+    const res = await fetch(PUSH_API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ subscription: sub.toJSON(), prefs, page:'/benefits/ms' }) });
+    if(!res.ok) throw new Error('订阅保存失败');
+    savePrefs(prefs);
+    const whenTxt = prefs.dom ? `每月 ${prefs.dom} 号（晚于发薪日则当天）` : '发薪日前一天';
+    markNotifyEnabled(whenTxt);
+    nmMsg(`✅ 已开启：${whenTxt}提醒。本月发薪日 ${fmtDate(upcomingPayday())}。`, 'ok');
+    document.getElementById('nm-save').textContent = '更新提醒设置';
+    document.getElementById('nm-unsub').style.display = 'block';
+    setTimeout(()=>{ document.getElementById('notify-modal').style.display='none'; }, 1600);
+  }catch(err){
+    const m = (err && err.message) || '';
+    const isMobileUa = /iphone|ipad|ipod|android|mobile/i.test(navigator.userAgent);
+    if(m==='__push_timeout__' || /network|failed|abort|register|push service/i.test(m)){
+      nmMsg(!isMobileUa
+        ? '连接推送服务超时。桌面 Chrome/Edge 的推送依赖 Google 服务，国内网络常连不上；请改用 iPhone Safari「添加到主屏幕」后订阅。'
+        : '连接推送服务超时，请检查网络后重试。', 'err');
+    } else {
+      nmMsg(m || '开启失败，请重试。', 'err');
+    }
+    btn.disabled=false; btn.textContent='保存并开启通知';
+  }
+}
+
+async function unsubNotify(){
+  try{
+    const sub = await currentSubscription();
+    if(sub){
+      const endpoint = sub.endpoint;
+      await sub.unsubscribe().catch(()=>{});
+      fetch(PUSH_API, { method:'DELETE', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ endpoint }) }).catch(()=>{});
+    }
+    savePrefs(null);
+    localStorage.removeItem(NM_PREFS_KEY);
+    nmMsg('已取消发薪日提醒订阅。', 'ok');
+    document.getElementById('nm-unsub').style.display = 'none';
+    document.getElementById('nm-save').textContent = '保存并开启通知';
+    const btn = document.getElementById('notify-btn'); if(btn){ btn.textContent='🔔 订阅发薪日提醒'; btn.disabled=false; btn.classList.remove('opacity-70','cursor-default'); }
+    setNotifyState('', '');
+  }catch(err){ nmMsg('取消失败，请重试。', 'err'); }
+}
+
+function markNotifyEnabled(whenTxt){
+  const btn = document.getElementById('notify-btn');
+  if(btn){ btn.textContent='✅ 已订阅（点此修改）'; btn.disabled=false; }
+  setNotifyState(whenTxt ? `已开启：${whenTxt}提醒` : '已开启发薪日提醒', 'ok');
+}
+
+// 已订阅则直接标记
+if('serviceWorker' in navigator && 'PushManager' in window){
+  currentSubscription().then(sub=>{
+    if(sub && Notification.permission==='granted'){
+      const p=loadPrefs();
+      markNotifyEnabled(p && p.dom ? `每月 ${p.dom} 号` : '发薪日前一天');
+      // 心跳（每 12h 最多一次）：刷新订阅时间戳，用于活跃统计；已删除的旧订阅不再心跳 → 自然过期
+      try{
+        const last=Number(localStorage.getItem('nm-hb')||0);
+        if(Date.now()-last > 12*3600*1000){
+          localStorage.setItem('nm-hb', String(Date.now()));
+          fetch(PUSH_API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ subscription: sub.toJSON(), prefs: p || {payday:true, dom:null}, page:'/benefits/ms' }) }).catch(()=>{});
+        }
+      }catch{}
+    }
+  }).catch(()=>{});
+}
+
+// 桌面（非 Safari）推送走 Google 国内不可用 → 卡片改成"扫码用手机订阅"
+let __notifyQrDone=false;
+function renderNotifyQR(){
+  if(__notifyQrDone) return;
+  const box=document.getElementById('notify-qr');
+  if(!box) return;
+  if(typeof QRCode==='undefined'){
+    if(window.__qrLibFailed) box.innerHTML='<span class="text-[10px] text-gray-400 px-1 text-center leading-tight">扫码不可用，请用手机打开本页链接</span>';
+    else { box.innerHTML='<span class="text-[10px] text-gray-400 px-1 text-center leading-tight">二维码加载中...</span>'; setTimeout(renderNotifyQR, 500); }
+    return;
+  }
+  try{ new QRCode(box, { text:new URL('?tab=payday', location.href).href, width:104, height:104, colorDark:'#1e293b', colorLight:'#ffffff', correctLevel: QRCode.CorrectLevel.M }); __notifyQrDone=true; }catch(e){ box.innerHTML='<span class="text-[10px] text-gray-400 px-1 text-center">扫码不可用</span>'; }
+}
+(function initNotifyCard(){
+  const ua=navigator.userAgent;
+  const isSafariUa=/safari/i.test(ua) && !/chrome|crios|edg|android|fxios/i.test(ua);
+  const isMobileUa=/iphone|ipad|ipod|android|mobile/i.test(ua);
+  if(!isMobileUa && !isSafariUa){
+    const btn=document.getElementById('notify-btn'); if(btn) btn.style.display='none';
+    const st=document.getElementById('notify-state'); if(st) st.style.display='none';
+    const qb=document.getElementById('notify-qr-block'); if(qb){ qb.style.display='block'; renderNotifyQR(); }
+  }
+})();
+
+</script>
+</body>
+</html>

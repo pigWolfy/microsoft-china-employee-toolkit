@@ -1,0 +1,46 @@
+{
+  "id": "./",
+  "name": "微软羊毛",
+  "short_name": "微软羊毛",
+  "description": "微软中国员工离职前必薅福利清单 · 发薪日 · 假期 · 薪资与大礼包计算器",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f1f5f9",
+  "theme_color": "#2563eb",
+  "lang": "zh-CN",
+  "categories": [
+    "finance",
+    "productivity",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "发薪日 & 假期",
+      "short_name": "发薪日",
+      "url": "./?tab=payday",
+      "description": "查看本月发薪日与下个假期"
+    },
+    {
+      "name": "薪资与大礼包计算器",
+      "short_name": "大礼包",
+      "url": "./?tab=calc",
+      "description": "离职 N+x 大礼包与薪资 midpoint"
+    }
+  ]
+}
