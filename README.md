@@ -10,21 +10,22 @@
 - 匿名福利建议、薪资 midpoint 样本、老板避雷榜
 - 页面统计和发薪日 Web Push 提醒
 
-## 完整本地运行
+## 本地运行
 
-需要 Node.js 20.9+。服务端会从仓库根目录同步静态文件，页面与 `/api/*` 接口在同一个地址运行。
+需要 Node.js 20.9+ 和 npm。全新克隆后，无需配置密钥或连接 TechFlow 主仓库，就能启动页面和公开接口：
 
 ```bash
-cd server
+git clone https://github.com/pigWolfy/microsoft-china-employee-toolkit.git
+cd microsoft-china-employee-toolkit/server
 npm ci
-cp .env.example .env.local
-# 在 .env.local 中配置 ADMIN_TOKEN、BOSS_ANON_SALT 等变量
 npm run dev
 ```
 
-打开 `http://localhost:3000/`。生产构建使用 `npm run build` 和 `npm start`。配置、接口、数据目录和推送任务详见 [服务端说明](server/README.md)。
+打开 `http://localhost:3000/`。福利清单、发薪日和本地计算器可直接使用；公开接口也能启动。仓库不包含线上投稿与薪资数据，所以本地薪资样本默认为空。编辑根目录的静态页面后，请重启开发服务以重新同步文件。
 
-没有配置管理员口令时，管理接口会拒绝访问；没有配置 VAPID 密钥时，推送订阅不可用。请勿把 `.env.local` 或 `server/data/` 提交到 Git。
+管理员功能、老板评分和推送提醒需要各自的环境变量。要开发这些功能，再参考 [服务端说明](server/README.md) 和 `server/.env.example` 创建自己的 `server/.env.local`。生产构建使用 `npm run build` 和 `npm start`。请勿把 `.env.local` 或 `server/data/` 提交到 Git。
+
+欢迎通过 [贡献指南](CONTRIBUTING.md) 提交改进。
 
 ## 仅托管静态页面
 
