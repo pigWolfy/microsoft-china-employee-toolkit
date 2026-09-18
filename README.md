@@ -2,6 +2,22 @@
 
 面向微软中国员工及校友的非官方工具箱，汇集福利清单、发薪日、薪资参考和离职补偿计算。线上页面：[wzkiwi.com/benefits/ms](https://wzkiwi.com/benefits/ms/)。本项目与微软没有官方关联。
 
+## 界面预览
+
+截图取自[线上页面](https://wzkiwi.com/benefits/ms/)；发薪日期等实时信息会随时间变化。
+
+### 福利清单
+
+![福利清单、筛选器和福利卡片](docs/screenshots/benefits.png)
+
+### 薪资与假期
+
+![发薪日、假期和提醒功能](docs/screenshots/payday.png)
+
+### 补偿计算器
+
+![离职补偿和未休假折算计算器](docs/screenshots/calculator.png)
+
 ## 功能
 
 - 福利清单、优先级与类别筛选
@@ -35,7 +51,7 @@ npm run dev
 
 仓库根目录的 `index.html`、`sw.js`、`manifest.webmanifest` 和两个 SVG 图标可由任意静态服务器托管；例如在仓库根目录运行 `python -m http.server 8000`。此模式可使用清单、发薪日和本地计算器，但投稿、薪资样本、避雷榜、统计和推送提醒需要服务端。PWA 需要 HTTPS 或 localhost。首次加载的 Tailwind CSS、QRCode.js 和 Google Fonts 来自外部 CDN。
 
-页面请求部署站点自身的 `/api/*`，不会向原站点发送用户提交的数据。原项目中的 PNG 截图、`home.html` 和 nginx 配置不被此页面引用，因此不在运行包中。
+页面请求部署站点自身的 `/api/*`，不会向原站点发送用户提交的数据。`docs/screenshots/` 仅供 README 预览。原项目中的 `home.html` 和 nginx 配置不被此页面引用，因此不在运行包中。
 
 ## 目录
 
@@ -45,6 +61,7 @@ npm run dev
 | `server/src/app/api/` | 页面使用的五组 Next.js 接口 |
 | `server/scripts/send-payday.mjs` | 每日运行的推送任务 |
 | `server/data/` | 本地 JSONL 数据，已忽略，不随源码发布 |
+| `docs/screenshots/` | README 界面预览图，不参与运行 |
 
 页面从 TechFlow 主仓库的 `deploy/benefits-standalone/` 导出。主仓库的 `scripts/export-benefits-open-source.py` 用于同步静态文件；服务端可独立运行，不连接原站点的数据目录。
 
