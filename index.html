@@ -156,6 +156,11 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
   #floating-save { top: 18px; right: 18px; bottom: auto; padding: 10px 14px; font-size: 13px; }
   #floating-refresh { top: 18px; right: 138px; bottom: auto; }
 }
+/* 通知应对指南：独立于表单和榜单的静态内容 */
+.guide-source { color: #1d4ed8; text-decoration: underline; text-underline-offset: 3px; }
+.guide-content li[id] { scroll-margin-top: 110px; }
+.guide-content summary:focus-visible, .guide-content button:focus-visible { outline: 2px solid #2563eb; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .guide-content { scroll-behavior: auto; } }
 </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-100 via-gray-50 to-blue-100 text-gray-800">
@@ -173,9 +178,10 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
       <button class="toptab-btn toptab-active" data-tab="benefits" onclick="switchTab('benefits')">💼 福利项</button>
       <button class="toptab-btn" data-tab="payday" onclick="switchTab('payday')">💰 薪资·假期</button>
       <button class="toptab-btn" data-tab="calc" onclick="switchTab('calc')">🎁 接裁神</button>
+      <button class="toptab-btn" data-tab="guide" onclick="switchTab('guide')">🧭 应对指南</button>
       <button class="toptab-btn boss-gated" data-tab="boss" onclick="switchTab('boss')" style="display:none">🛡️ 避雷榜</button>
     </div>
-    <span class="toptab-hint" id="toptab-hint">👆 点上方切换板块：福利清单 · 发薪日/假期 · 大礼包计算器 · 老板避雷榜</span>
+    <span class="toptab-hint" id="toptab-hint">👆 点上方切换板块：福利清单 · 发薪日/假期 · 大礼包计算器 · 应对指南 · 老板避雷榜</span>
   </nav>
 
   <!-- ===== Panel A: 福利项 ===== -->
@@ -202,6 +208,8 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
       </a>
     </div>
   </div>
+
+  <a href="?tab=guide" onclick="switchTab('guide');return false;" class="block mb-5 rounded-xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-800 hover:bg-blue-100">🧭 收到 LITE / PIP / GVSA / IBU？查看应对流程与签字前清单 →</a>
 
   <!-- Priority filter -->
   <div class="flex items-center gap-3 mb-6 fade-up" style="animation-delay:0.1s">
@@ -514,6 +522,142 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
   </div>
   </section>
 
+  <!-- ===== Panel: 收到通知后的权益与协商指南 ===== -->
+  <section data-panel="guide" class="tab-panel">
+    <div class="guide-content space-y-5">
+      <header class="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-5 sm:p-7">
+        <p class="text-xs font-semibold text-blue-600 tracking-wide">LITE · PIP · GVSA · IBU</p>
+        <h2 class="mt-2 text-2xl sm:text-3xl font-black text-gray-900">收到通知后，怎样把权益争取完整？</h2>
+        <p class="mt-3 text-sm text-slate-600 leading-relaxed">先确认发生了什么，再算清每项权益，最后决定留下、协商离开或依法维权。目标是提高可兑现的总收益，同时保留职业选择。</p>
+        <p class="mt-3 text-xs text-slate-500 leading-relaxed">适用范围：中国大陆劳动关系。核对日期：2026-09-22。本页是通用办事与协商参考，不能替代对个人合同的法律审查；港澳台及海外雇佣另行核对当地规则。</p>
+        <div class="mt-4 grid gap-2 sm:grid-cols-3 text-sm font-semibold">
+          <div class="rounded-xl bg-white border border-blue-100 p-3">① 拿到完整书面材料</div>
+          <div class="rounded-xl bg-white border border-blue-100 p-3">② 核对钱、日期和限制</div>
+          <div class="rounded-xl bg-white border border-blue-100 p-3">③ 审阅后再作决定</div>
+        </div>
+      </header>
+
+      <article class="rounded-2xl border border-gray-200 bg-white p-5">
+        <h3 class="text-lg font-bold text-gray-900">先选你收到的通知</h3>
+        <p class="mt-2 text-xs text-gray-500">以下按社区语境解释缩写，不代表微软官方制度。适用政策版本、申诉期限、转岗资格和补偿金额，均须向 HR 获取书面确认。</p>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+          <details class="guide-scenario rounded-xl border border-blue-100 bg-blue-50/40 p-4" open>
+            <summary class="cursor-pointer font-bold text-blue-800">LITE · Connect 低于预期</summary>
+            <ul class="mt-3 list-disc pl-5 space-y-2 text-sm text-slate-600">
+              <li>索取具体评价事实、衡量标准、评价周期及反馈记录；把不一致之处逐项写成事实清单。</li>
+              <li>确认这是否只是一项评级，还是已启动 PIP；询问申诉渠道、回复截止日和复核人。</li>
+              <li>核对它对奖励、晋升、转岗的实际影响。继续完成工作并留存反馈，勿仅因评级就提交辞职。</li>
+            </ul>
+          </details>
+          <details class="guide-scenario rounded-xl border border-violet-100 bg-violet-50/40 p-4">
+            <summary class="cursor-pointer font-bold text-violet-800">PIP · 绩效改进计划</summary>
+            <ul class="mt-3 list-disc pl-5 space-y-2 text-sm text-slate-600">
+              <li>让目标可验证：交付物、基线、截止日、评分人、资源支持和复盘频率写明；书面指出不可控依赖。</li>
+              <li>每次复盘记录“完成什么、还缺什么、需要什么支持”；对不准确的结论及时书面回应，保留版本。</li>
+              <li>问清通过、未通过、转岗和退出方案各自后果。PIP 本身不能直接证明解除合法；以不能胜任工作解除还涉及培训或调岗后仍不能胜任等条件。<a class="guide-source" href="#guide-law">[1]</a></li>
+            </ul>
+          </details>
+          <details class="guide-scenario rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
+            <summary class="cursor-pointer font-bold text-emerald-800">GVSA · 协商离职</summary>
+            <ul class="mt-3 list-disc pl-5 space-y-2 text-sm text-slate-600">
+              <li>索取完整协议、附件、分项报价和接受期限；确认谁提出解除，以及不接受时下一步是什么。</li>
+              <li>分别核对工资结算、法定补偿、额外激励和限制条款。协商离开与个人原因辞职的法律后果可能不同，文字必须符合事实。</li>
+              <li>申请合理审阅时间，再给出有金额、有日期的书面还价；不要假设签署后可以无条件撤回。<a class="guide-source" href="#guide-agreement">[3]</a></li>
+            </ul>
+          </details>
+          <details class="guide-scenario rounded-xl border border-amber-100 bg-amber-50/40 p-4">
+            <summary class="cursor-pointer font-bold text-amber-800">IBU · 业务调整引发裁员</summary>
+            <ul class="mt-3 list-disc pl-5 space-y-2 text-sm text-slate-600">
+              <li>确认个人岗位是否受影响、合同雇主是谁、拟解除理由和日期；保存正式通知与送达时间。</li>
+              <li>问清实际路径：协商解除、客观情况重大变化，还是经济性裁员。IBU 会议名称本身不决定法律性质。<a class="guide-source" href="#guide-law">[1]</a></li>
+              <li>询问内部岗位、转岗窗口、服务年限衔接、带薪过渡期和 package；每个选项的期限及条件要有书面版本。</li>
+            </ul>
+          </details>
+        </div>
+      </article>
+
+      <article class="rounded-2xl border border-gray-200 bg-white p-5">
+        <h3 class="text-lg font-bold text-gray-900">从通知到结算，按这 6 步走</h3>
+        <p class="mt-2 text-xs text-gray-500">“当天 / 后续几天”是行动建议，不是法定宽限期。公司回复期限与法律时效要单独核对。</p>
+        <ol class="mt-4 space-y-5 text-sm text-slate-600 leading-relaxed">
+          <li><h4 class="font-bold text-slate-900">01 · 当天：确认收悉，拿齐材料</h4><p class="mt-1">索取通知、依据、方案全文、附件、截止日和联系人；问清是否需要立即停止工作及停工期间工资待遇。区分“签收”与“同意内容”：如需确认收悉，要求写清仅确认收到并索取副本；这类表述不保证排除文件本身的法律效力。先阅读每一页，再决定是否签署。</p></li>
+          <li><h4 class="font-bold text-slate-900">02 · 尽快：建立个人事实和材料清单</h4><p class="mt-1">整理自己的劳动合同、入职与主体变更日期、工资奖金明细、绩效反馈、休假余额、股票授予协议及通知往来。保留原始时间和版本，缺件向 HR 申请。仅保存依法可持有且与本人权益相关的材料；不要绕过权限、批量带走公司邮箱、代码或客户资料。</p></li>
+          <li><h4 class="font-bold text-slate-900">03 · 继续履职：把沟通写成记录</h4><p class="mt-1">正常出勤、交付、合规请假；每次会后发简短纪要，请对方更正事实。若账号关闭或无法进入办公场所，书面说明愿意履职并询问工作安排，保留相关通知；不要通过旷工、删资料、消极交接制造新的争议。</p></li>
+          <li><h4 class="font-bold text-slate-900">04 · 比较方案：先算完整，再谈条件</h4><p class="mt-1">做一张“继续履职 / 转岗 / 协商离开 / 争议处理”对照表：可确定收入、或有收入、兑现时间、成本和限制分开列。设定目标方案及可接受底线，并结合新工作机会和现金储备决定优先项。</p></li>
+          <li><h4 class="font-bold text-slate-900">05 · 签字前：核对最终文本</h4><p class="mt-1">把口头承诺放进正式协议：解除性质、最后工作日、劳动关系结束日、各项金额、付款条件及日期、违约处理、离职证明和竞业安排。核对“全部结清 / 放弃请求 / 承认不胜任或违纪”等条款及附件。有疑问时，请当地劳动法律师审阅；有效解除协议通常有约束力。<a class="guide-source" href="#guide-agreement">[3]</a></p></li>
+          <li><h4 class="font-bold text-slate-900">06 · 离职后：按清单验收</h4><p class="mt-1">保留双方签署版本、交接和资产归还凭证；逐项核对到账、工资税单、离职证明、社保公积金和保险衔接。未按约履行时及时书面催告并咨询救济，不把内部申诉当成可以无限等待的理由。</p></li>
+        </ol>
+      </article>
+
+      <article class="rounded-2xl border border-gray-200 bg-white p-5">
+        <h3 class="text-lg font-bold text-gray-900">把总收益拆成 6 项，再给 HR 一份还价</h3>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2 text-sm text-slate-600 leading-relaxed">
+          <div class="rounded-xl bg-gray-50 p-4"><h4 class="font-bold text-gray-900">工资与补偿</h4><p class="mt-1">分开列截止日工资、补偿、额外激励及各自基数；问清是否已经包含某项，避免重复相加。法定补偿基数不能仅凭基本工资判断，还需核对符合规定的奖金、津补贴等。<a class="guide-source" href="#guide-wage">[2]</a></p></div>
+          <div class="rounded-xl bg-gray-50 p-4"><h4 class="font-bold text-gray-900">奖金与股票</h4><p class="mt-1">核对奖金资格日、发放日、按比例发放条件及下一次 vesting；“工作到某一天”和“何时结束雇佣”可能影响结果。争取符合协议的日期或替代补偿，不能假设离职后未归属股票自动保留。</p></div>
+          <div class="rounded-xl bg-gray-50 p-4"><h4 class="font-bold text-gray-900">假期与保险</h4><p class="mt-1">法定年假、公司补充假、年资假分别列余额和处理方式。符合法定条件的未休年假，300% 工资报酬已含正常工资，通常另付 200%；公司福利假按适用约定核对。商业保险截止及理赔提交期限另向承保方确认。<a class="guide-source" href="#guide-leave">[4]</a></p></div>
+          <div class="rounded-xl bg-gray-50 p-4"><h4 class="font-bold text-gray-900">日期与现金流</h4><p class="mt-1">对比税前金额、预计税后到账、一次付清或分期、过渡期工资及求职空档。把股票日期、奖金资格和保险衔接放到同一日历，选择整体更有利且可落实的组合。</p></div>
+          <div class="rounded-xl bg-gray-50 p-4"><h4 class="font-bold text-gray-900">再就业与竞业</h4><p class="mt-1">问清竞业是否启动、范围、期限、补偿和解除方式，以及背景调查口径、推荐信和再入职资格。竞业限制的适用存在法定边界，先审查具体条款，不自行认定“一律有效”或“一律无效”。<a class="guide-source" href="#guide-noncompete">[7]</a></p></div>
+          <div class="rounded-xl bg-gray-50 p-4"><h4 class="font-bold text-gray-900">返还与附加条件</h4><p class="mt-1">核对签字费、搬迁费、培训或服务期约定的返还要求，以及付款是否挂钩交接、撤诉、放弃权利等条件。协商减免、明确期限；不能只看 package 的宣传总额。</p></div>
+        </div>
+        <p class="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-3 text-sm text-blue-900">还价可以写成：“我优先关注 A（例如最后工作日），希望 B（金额 / 支付日期）；若 A 无法调整，能否以 C（明确的替代条件）解决？”用可核实的依据和书面方案沟通。加价、延长雇佣、额外奖金和股票安排均需双方同意，不是自动权利。</p>
+        <button type="button" onclick="switchTab('calc')" class="mt-3 text-sm font-semibold text-blue-700 underline underline-offset-4">打开补偿计算器，做初步估算 →</button>
+        <p class="mt-1 text-xs text-gray-500">计算器只辅助比较；工龄、工资基数、法定年假与本地规则须按本人材料复核，不能用年龄直接替代实际累计工作年限。</p>
+      </article>
+
+      <article class="rounded-2xl border border-amber-200 bg-amber-50/60 p-5">
+        <h3 class="text-lg font-bold text-gray-900">几个会影响决定的法律边界</h3>
+        <ul class="mt-3 list-disc pl-5 space-y-2 text-sm text-slate-700 leading-relaxed">
+          <li>“N”通常指依法计算的经济补偿。“+1”与第 40 条解除时的通知替代安排有关，不是所有协商离职、裁员都自动另加一个月。“2N”涉及违法解除等法定条件，不能与 N、+1 任意叠加。<a class="guide-source" href="#guide-law">[1]</a></li>
+          <li>补偿年限和基数需核对；高收入者可能适用本地上年度职工月均工资三倍及相应年限上限，并非所有人都封顶 12 年。跨主体工龄、2008 年前工龄等复杂情况需专项复核。<a class="guide-source" href="#guide-law">[1]</a></li>
+          <li>孕期、产期、哺乳期、规定医疗期等情形，可能限制单位依据第 40、41 条解除；保护范围与适用路径须具体判断。出现这些情况或收到正式单方解除通知，优先咨询专业人士。<a class="guide-source" href="#guide-law">[1]</a></li>
+          <li>劳动争议仲裁通常有一年时效，起算、中断与中止要按具体请求判断；劳动关系存续期间拖欠劳动报酬另有规则，关系终止后须注意一年期限。保留提出权利主张的证据，勿假设仅走内部流程就已保住时效。<a class="guide-source" href="#guide-limitation">[5]</a> <a class="guide-source" href="#guide-pay-limitation">[6]</a></li>
+        </ul>
+        <p class="mt-3 text-sm text-slate-700">存在明显争议时，可联系当地人社部门、劳动人事争议仲裁机构或劳动法律师；也可向工会询问支持。送达任何仲裁 / 法院文书后立即核对救济期限，不套用上面的一年期限。</p>
+      </article>
+
+      <article class="rounded-2xl border border-gray-200 bg-white p-5">
+        <div class="flex items-center justify-between gap-3"><h3 class="text-lg font-bold text-gray-900">我的签字前核对清单</h3><output id="guide-progress" class="shrink-0 text-sm font-semibold text-blue-700" aria-live="polite">0 / 6</output></div>
+        <p class="mt-2 text-xs text-gray-500">只在此浏览器保存勾选进度，不上传合同或金额。完成勾选不代表协议已通过法律审查。</p>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2 text-sm text-slate-700">
+          <label class="flex items-start gap-2"><input type="checkbox" data-guide-check="notice" class="mt-1 accent-blue-600">已拿到通知、方案全文与回复期限</label>
+          <label class="flex items-start gap-2"><input type="checkbox" data-guide-check="route" class="mt-1 accent-blue-600">已确认解除性质、雇主主体和工龄</label>
+          <label class="flex items-start gap-2"><input type="checkbox" data-guide-check="money" class="mt-1 accent-blue-600">已分项核对金额、基数和预计税后到账</label>
+          <label class="flex items-start gap-2"><input type="checkbox" data-guide-check="dates" class="mt-1 accent-blue-600">已核对奖金股票、假期及保险日期</label>
+          <label class="flex items-start gap-2"><input type="checkbox" data-guide-check="terms" class="mt-1 accent-blue-600">已审阅付款、放弃请求、竞业和返还条款</label>
+          <label class="flex items-start gap-2"><input type="checkbox" data-guide-check="copy" class="mt-1 accent-blue-600">已确认签署副本、交接和离职证明安排</label>
+        </div>
+      </article>
+
+      <article class="rounded-2xl border border-gray-200 bg-white p-5">
+        <h3 class="text-lg font-bold text-gray-900">发给 HR 的信息核对模板</h3>
+        <p class="mt-2 text-xs text-gray-500">按自己的事实删改后再发送。此模板用于收集信息，不构成接受或拒绝任何方案的法律保证。</p>
+        <textarea id="guide-hr-template" readonly rows="10" aria-label="HR 信息核对模板" class="mt-3 w-full rounded-xl border border-gray-200 bg-gray-50 p-3 text-sm leading-relaxed text-slate-700">您好，我已收到本次通知，希望在充分了解后作出决定。请协助书面确认：
+1. 本次流程的性质、适用政策及版本、具体事实依据、申诉 / 复核渠道与各项截止日期；
+2. 是否涉及解除劳动合同、由谁提出、最后工作日及劳动关系结束日；
+3. 完整方案和协议附件，工资、补偿、额外激励的分项金额、计算基数、税款处理、付款条件和日期；
+4. 奖金资格、股票归属、各类假期、商业保险、社保公积金及离职证明的安排；
+5. 内部转岗、过渡期、竞业限制、背景调查和费用返还要求，以及不接受当前方案的后续流程。
+如当前期限不足以核对材料，希望协商合理的审阅时间。我会继续按要求履职和配合沟通；对于需要进一步核实的事实及条款，希望保留讨论空间。谢谢。</textarea>
+        <button type="button" onclick="copyGuideTemplate()" class="mt-3 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">复制模板</button>
+        <p id="guide-copy-status" role="status" class="mt-2 text-xs text-slate-500"></p>
+      </article>
+
+      <article class="rounded-2xl border border-gray-200 bg-white p-5 text-xs text-slate-500 leading-relaxed">
+        <h3 class="text-base font-bold text-gray-900">法规来源与核对范围</h3>
+        <p class="mt-2">流程建议与协商话术为本项目整理。下列公开资料用于法律边界；未公开的微软项目细则、个人补偿报价和 HR 承诺均须另行核对。</p>
+        <ol class="mt-3 space-y-2">
+          <li id="guide-law">[1] <a class="guide-source" href="https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/bgt/art/2023/art_0abfdd261c03417b949df19d869add8d.html" target="_blank" rel="noopener noreferrer">《劳动合同法》</a>：第 36、39–43、46–50、87 条等。</li>
+          <li id="guide-wage">[2] <a class="guide-source" href="https://www.huaihua.gov.cn/rsj/c116048/201507/0c53d359012c49059642a3ab9823e450.shtml" target="_blank" rel="noopener noreferrer">《劳动合同法实施条例》</a>：第 20、27 条，代通知金与经济补偿基数需分别核对。</li>
+          <li id="guide-agreement">[3] <a class="guide-source" href="https://www.sdcourt.gov.cn/jningzcfy/386500/386502/6714746/index.html" target="_blank" rel="noopener noreferrer">劳动争议司法解释（一）</a>：第 35 条，解除结算协议效力。</li>
+          <li id="guide-leave">[4] <a class="guide-source" href="https://www.cqtn.gov.cn/bm/qrlsbj/zwgk_25192/zfxxgkml_bm/zcwj_bm/qtwj_bm/202103/t20210301_8950506.html" target="_blank" rel="noopener noreferrer">《企业职工带薪年休假实施办法》</a>：第 10–12 条，未休法定年假的工资与离职折算。</li>
+          <li id="guide-limitation">[5] <a class="guide-source" href="https://rsj.beijing.gov.cn/qaknowledge/202203/t20220331_2644697.html" target="_blank" rel="noopener noreferrer">北京市人社局：劳动争议仲裁时效问答</a>。</li>
+          <li id="guide-pay-limitation">[6] <a class="guide-source" href="https://hrss.sz.gov.cn/zmhd/cjwt/cjwt/ldgx/content/post_11219533.html" target="_blank" rel="noopener noreferrer">深圳市人社局：拖欠劳动报酬争议的时效</a>。</li>
+          <li id="guide-noncompete">[7] <a class="guide-source" href="https://www.court.gov.cn/zixun/xiangqing/472641.html" target="_blank" rel="noopener noreferrer">最高人民法院：劳动争议司法解释（二）发布与解读</a>，2025-09-01 起施行。</li>
+        </ol>
+      </article>
+    </div>
+  </section>
+
   <!-- ===== Panel D: 匿名群聊 ===== -->
   <!-- ===== Panel D: 避雷榜（匿名老板打分） ===== -->
   <section data-panel="boss" class="tab-panel">
@@ -615,6 +759,9 @@ body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
     </button>
     <button class="tabbar-btn" data-tab="calc" onclick="switchTab('calc')" aria-label="接裁神（大礼包计算器）">
       <span class="tabbar-ico">🎁</span><span>接裁神</span>
+    </button>
+    <button class="tabbar-btn" data-tab="guide" onclick="switchTab('guide')" aria-label="收到通知后的应对指南">
+      <span class="tabbar-ico">🧭</span><span>应对指南</span>
     </button>
     <button class="tabbar-btn boss-gated" data-tab="boss" onclick="switchTab('boss')" aria-label="老板避雷榜" style="display:none">
       <span class="tabbar-ico">🛡️</span><span>避雷榜</span>
@@ -1293,8 +1440,31 @@ try{fetch('/api/stats',{method:'POST',headers:{'Content-Type':'application/json'
 
 // Tab view tracking（每次切换 tab 记一次，用于统计各 tab 访问占比）
 function trackTab(name){
-  if(!['benefits','payday','calc','boss'].includes(name))return;
+  if(!['benefits','payday','calc','guide','boss'].includes(name))return;
   try{fetch('/api/stats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({page:'/benefits/ms/tab/'+name})}).catch(()=>{});}catch{}
+}
+
+// 指南仅保存勾选状态；没有合同、薪资或身份信息输入。
+(function initGuideChecklist(){
+  const boxes=[...document.querySelectorAll('[data-guide-check]')];
+  const storageKey='tf_ms_response_guide_checks_v1';
+  let saved=[];
+  try{ const value=JSON.parse(localStorage.getItem(storageKey)||'[]'); if(Array.isArray(value))saved=value; }catch{}
+  const update=()=>{ document.getElementById('guide-progress').textContent=`${boxes.filter(b=>b.checked).length} / ${boxes.length}`; };
+  boxes.forEach(box=>{
+    box.checked=saved.includes(box.dataset.guideCheck);
+    box.addEventListener('change',()=>{
+      update();
+      try{localStorage.setItem(storageKey,JSON.stringify(boxes.filter(b=>b.checked).map(b=>b.dataset.guideCheck)));}catch{}
+    });
+  });
+  update();
+})();
+async function copyGuideTemplate(){
+  const field=document.getElementById('guide-hr-template');
+  const status=document.getElementById('guide-copy-status');
+  try{await navigator.clipboard.writeText(field.value); status.textContent='已复制，请按自己的事实修改后发送。';}
+  catch{field.focus();field.select();status.textContent='已选中文本，请长按或使用复制快捷键。';}
 }
 
 /* ========== 老板避雷榜（匿名结构化打分） ========== */
@@ -1553,7 +1723,7 @@ window.addEventListener('resize', ()=>updateTabIndicators(document.querySelector
 // 支持 ?tab=payday / ?tab=calc 直达（PWA 快捷方式）
 (function initTab(){
   const t = new URLSearchParams(location.search).get('tab');
-  if(t && ['benefits','payday','calc','boss'].includes(t)){ switchTab(t); }
+  if(t && ['benefits','payday','calc','guide','boss'].includes(t)){ switchTab(t); }
   else { try{ trackTab('benefits'); }catch{} }
 })();
 
@@ -1607,7 +1777,7 @@ async function hardRefresh(btn, opts={}){
     if(__swReg) await __swReg.update().catch(()=>{});
     if(!opts.skipCacheDelete && 'caches' in window){
       const ks = await caches.keys();
-      await Promise.all(ks.filter(k=>k.startsWith('benefits-ms-') && k !== 'benefits-ms-open-v3').map(k=>caches.delete(k)));
+      await Promise.all(ks.filter(k=>k.startsWith('benefits-ms-') && k !== 'benefits-ms-open-v4').map(k=>caches.delete(k)));
     }
   }catch{}
   __reloading = true;

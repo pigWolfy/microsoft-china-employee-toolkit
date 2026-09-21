@@ -3,7 +3,7 @@
  * - Web Push: 展示发薪日/假期提醒
  * - 离线兜底：缓存壳页面
  */
-const CACHE = 'benefits-ms-open-v3';
+const CACHE = 'benefits-ms-open-v4';
 const BASE = new URL('./', self.location.href).pathname;
 const SHELL = [BASE, BASE + 'index.html', BASE + 'manifest.webmanifest', BASE + 'icon.svg'];
 

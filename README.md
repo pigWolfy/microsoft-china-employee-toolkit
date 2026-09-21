@@ -20,6 +20,7 @@
 
 ## 功能
 
+- [LITE / PIP / GVSA / IBU 应对指南](https://wzkiwi.com/benefits/ms/?tab=guide)：分场景流程、协商项目、签字前清单与 HR 沟通模板
 - 福利清单、优先级与类别筛选
 - 发薪日、假期和股票区间参考
 - 离职补偿与未休假折算计算器
